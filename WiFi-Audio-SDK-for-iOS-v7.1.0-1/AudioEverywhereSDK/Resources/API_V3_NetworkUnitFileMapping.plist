@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>static_ip</key>
+	<string>static_ip</string>
+	<key>static_enabled</key>
+	<string>static_enabled</string>
+	<key>netmask</key>
+	<string>netmask</string>
+	<key>gateway</key>
+	<string>gateway</string>
+	<key>tos_ds</key>
+	<string>tos_ds</string>
+	<key>vlan_priority</key>
+	<string>vlan_priority</string>
+	<key>dhcp_server_enabled</key>
+	<string>dhcp_server_enabled</string>
+	<key>ip_range_start</key>
+	<string>ip_range_start</string>
+	<key>ip_range_stop</key>
+	<string>ip_range_stop</string>
+	<key>lease_time</key>
+	<string>lease_time</string>
+	<key>dns_name_servers</key>
+	<string>dns_name_servers</string>
+</dict>
+</plist>

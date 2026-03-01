@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>audio_language</key>
+	<string>audio_language</string>
+	<key>auto_off_timeout</key>
+	<string>auto_off_timeout</string>
+	<key>auto_power</key>
+	<string>auto_power</string>
+	<key>brightness</key>
+	<string>brightness</string>
+	<key>jack_sense</key>
+	<string>jack_sense</string>
+	<key>text_language</key>
+	<string>text_language</string>
+	<key>volume</key>
+	<string>volume</string>
+</dict>
+</plist>

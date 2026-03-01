@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>banners</key>
+	<string>banners</string>
+	<key>channel_image</key>
+	<string>channel_image</string>
+	<key>document</key>
+	<string>document</string>
+	<key>offer</key>
+	<string>offer</string>
+	<key>track</key>
+	<string>track</string>
+	<key>welcome_ad</key>
+	<string>welcome_ad</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>imageURL</key>
+	<string>featuredImageUrl</string>
+	<key>channelContent</key>
+	<string>moreInfoUrl</string>
+	<key>channelColor</key>
+	<string>rawBackgroundColor</string>
+	<key>channelLabel</key>
+	<string>title</string>
+	<key>id</key>
+	<string>uniqueIdentifier</string>
+</dict>
+</plist>

@@ -1,0 +1,2430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TyphoonComponentFactory Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/objc/Class/TyphoonComponentFactory" class="dashAnchor"></a>
+    <a title="TyphoonComponentFactory Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">LE iOS SDK </a></p>
+        <div class="header-right"><p id="developer-home">
+				<a href="index.html">Listen Technologies Inc.</a>
+			</p>
+			
+		</div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Index</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        <a href="../Classes.html">Classes</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        TyphoonComponentFactory Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Categories.html">Categories</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Categories/NSObject%28FactoryHooks%29.html">NSObject(FactoryHooks)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/BAWebService.html">BAWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/BAWebServiceError.html">BAWebServiceError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEAdvertisement.html">EAEAdvertisement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEAssembly.html">EAEAssembly</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEAssetsVenueConfFile.html">EAEAssetsVenueConfFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEAudioChannel.html">EAEAudioChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEAuthentication.html">EAEAuthentication</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEBonjourDiscoveryService.html">EAEBonjourDiscoveryService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEConnectionConstants">EAEConnectionConstants</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEContent.html">EAEContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEDebugInformation.html">EAEDebugInformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEDefaultProfileConfigFile.html">EAEDefaultProfileConfigFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEDeviceInformation.html">EAEDeviceInformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEDocumentCategory.html">EAEDocumentCategory</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEDocumentInformation.html">EAEDocumentInformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEEvent.html">EAEEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEExxtractorAPIConstants.html">EAEExxtractorAPIConstants</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorAuthenticationRestKitWebService">EAEExxtractorAuthenticationRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorChannelRestKitWebService">EAEExxtractorChannelRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorClientError">EAEExxtractorClientError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEExxtractorConnection.html">EAEExxtractorConnection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorContentRestKitWebService">EAEExxtractorContentRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorDocumentRestKitWebService">EAEExxtractorDocumentRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorLocationRestKitWebService">EAEExxtractorLocationRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEExxtractorManagerConnection.html">EAEExxtractorManagerConnection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorNeighborRestKitWebService">EAEExxtractorNeighborRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorServerActionsRestKitWebService">EAEExxtractorServerActionsRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorServerRestKitWebService">EAEExxtractorServerRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorStatRestKitWebService">EAEExxtractorStatRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorStreamRestKitWebService">EAEExxtractorStreamRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)EAEExxtractorUserRestKitWebService">EAEExxtractorUserRestKitWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEExxtractorWebService.html">EAEExxtractorWebService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEFeaturesHelper.html">EAEFeaturesHelper</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEInfrastructureVenueConfFile.html">EAEInfrastructureVenueConfFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAELocation.html">EAELocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAELocationDetail.html">EAELocationDetail</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEMobileAppVenueConfFile.html">EAEMobileAppVenueConfFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAENetworkUnitFile.html">EAENetworkUnitFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEOperatorSession.html">EAEOperatorSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEPaConfigFile.html">EAEPaConfigFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEPlaybackService.html">EAEPlaybackService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfile.html">EAEProfile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAssets.html">EAEProfileAssets</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAudio.html">EAEProfileAudio</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAudioOp.html">EAEProfileAudioOp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAudioOpSource.html">EAEProfileAudioOpSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAudioOpSourceMobileApp.html">EAEProfileAudioOpSourceMobileApp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAudioOpSourceResourse.html">EAEProfileAudioOpSourceResourse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileAutomations.html">EAEProfileAutomations</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileBanner.html">EAEProfileBanner</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileBanners.html">EAEProfileBanners</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileChannel.html">EAEProfileChannel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileCommand.html">EAEProfileCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileDocument.html">EAEProfileDocument</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileDocuments.html">EAEProfileDocuments</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileInfrastructure.html">EAEProfileInfrastructure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileKey.html">EAEProfileKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileMenu.html">EAEProfileMenu</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileMenuOpt.html">EAEProfileMenuOpt</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileMeta.html">EAEProfileMeta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileOffer.html">EAEProfileOffer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileOffers.html">EAEProfileOffers</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileServer.html">EAEProfileServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileServers.html">EAEProfileServers</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileSetting.html">EAEProfileSetting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfileTheme.html">EAEProfileTheme</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEProfilesVenueConfFile.html">EAEProfilesVenueConfFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfile.html">EAEReceiverProfile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileAudioOp.html">EAEReceiverProfileAudioOp</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileAudioOpSource.html">EAEReceiverProfileAudioOpSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileAudioOpSourceResource.html">EAEReceiverProfileAudioOpSourceResource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileAutomations.html">EAEReceiverProfileAutomations</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileCommand.html">EAEReceiverProfileCommand</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileInfrastructure.html">EAEReceiverProfileInfrastructure</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileMeta.html">EAEReceiverProfileMeta</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileServer.html">EAEReceiverProfileServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverProfileSetting.html">EAEReceiverProfileSetting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEReceiverVenueConfFile.html">EAEReceiverVenueConfFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAESchedule.html">EAESchedule</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEServer.html">EAEServer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEServerLog.html">EAEServerLog</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEServerState.html">EAEServerState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAESession.html">EAESession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAESkin.html">EAESkin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAESocialInformation.html">EAESocialInformation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEStat.html">EAEStat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEStream.html">EAEStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAETimedDiscoveredVenuePollingService.html">EAETimedDiscoveredVenuePollingService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEUnicodeHelper.html">EAEUnicodeHelper</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEUnitFile.html">EAEUnitFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEVenueConfigFile.html">EAEVenueConfigFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEVenueServerUser.html">EAEVenueServerUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EAEWelcomeAd.html">EAEWelcomeAd</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GCDAsyncUdpSocket.html">GCDAsyncUdpSocket</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonAssembly.html">TyphoonAssembly</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonBlockComponentFactory.html">TyphoonBlockComponentFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonBundleResource.html">TyphoonBundleResource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonCollaboratingAssemblyProxy.html">TyphoonCollaboratingAssemblyProxy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonComponentFactory.html">TyphoonComponentFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonConfigPostProcessor.html">TyphoonConfigPostProcessor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:objc(cs)TyphoonInjectedObject">TyphoonInjectedObject</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonIntrospectionUtils.html">TyphoonIntrospectionUtils</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonMethod.html">TyphoonMethod</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonOptionMatcher.html">TyphoonOptionMatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonPathResource.html">TyphoonPathResource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Constants.html">Constants</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@EAEExxtractorConnectionErrorCodeForAlreadyOpenSession">EAEExxtractorConnectionErrorCodeForAlreadyOpenSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@GCDAsyncUdpSocketErrorDomain">GCDAsyncUdpSocketErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@GCDAsyncUdpSocketException">GCDAsyncUdpSocketException</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@GCDAsyncUdpSocketQueueName">GCDAsyncUdpSocketQueueName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@GCDAsyncUdpSocketThreadName">GCDAsyncUdpSocketThreadName</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:TyphoonDefinition.h@TyphoonAutoInjectVisibilityDefault">TyphoonAutoInjectVisibilityDefault</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@TyphoonVersionNumber">TyphoonVersionNumber</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@TyphoonVersionString">TyphoonVersionString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAEmptyString">kAEAEmptyString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAGenericServerString">kAEAGenericServerString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAIdentifierBeacons">kAEAIdentifierBeacons</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEALocaleLanguageCodeKey">kAEALocaleLanguageCodeKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAMessageForSelectLanguage">kAEAMessageForSelectLanguage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEATitleForSelectLanguage">kAEATitleForSelectLanguage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAUUIDListenBeacons">kAEAUUIDListenBeacons</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAUserDefaultIsOperatorModeAvailable">kAEAUserDefaultIsOperatorModeAvailable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEAUserDefaultLangFilter">kAEAUserDefaultLangFilter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAEDebugModeActive">kAEDebugModeActive</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kAERssi">kAERssi</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kConnectionTimeout">kConnectionTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kDefaultRequestTimeout">kDefaultRequestTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kDeviceTypeIpad">kDeviceTypeIpad</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kDeviceTypeIphone">kDeviceTypeIphone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kDeviceTypeIphone5">kDeviceTypeIphone5</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kDnsRecordRequestTimeout">kDnsRecordRequestTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEAppStoreUrlKey">kEAEAppStoreUrlKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEAudioChannelPortForExxtractor">kEAEAudioChannelPortForExxtractor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEConnectionHistoryUserDefaultsKey">kEAEConnectionHistoryUserDefaultsKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIProfileDefault">kEAEControllerAPIProfileDefault</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIV3PathForProfiles">kEAEControllerAPIV3PathForProfiles</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIV3PathForProfilesMenu">kEAEControllerAPIV3PathForProfilesMenu</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIV3PathForReceiverProfiles">kEAEControllerAPIV3PathForReceiverProfiles</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIV3PathForServerInfo">kEAEControllerAPIV3PathForServerInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIV3PathForServerUnitFile">kEAEControllerAPIV3PathForServerUnitFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEControllerAPIV3PathForServerVenueConfigFile">kEAEControllerAPIV3PathForServerVenueConfigFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorCodeForHTTPRequestError">kEAEErrorCodeForHTTPRequestError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForAlreadyOpenSession">kEAEErrorDescriptionForAlreadyOpenSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForInterruptedScan">kEAEErrorDescriptionForInterruptedScan</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForInvalidLocation">kEAEErrorDescriptionForInvalidLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForNoConnectedService">kEAEErrorDescriptionForNoConnectedService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForPrivateChannels">kEAEErrorDescriptionForPrivateChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForScanTimeout">kEAEErrorDescriptionForScanTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForUnavailableService">kEAEErrorDescriptionForUnavailableService</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForUnknownError">kEAEErrorDescriptionForUnknownError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDescriptionForUnreachableLAN">kEAEErrorDescriptionForUnreachableLAN</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEErrorDomain">kEAEErrorDomain</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxothermicPartnerId">kEAEExxothermicPartnerId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIAuthorization">kEAEExxtractorAPIAuthorization</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIDevideIdParameter">kEAEExxtractorAPIDevideIdParameter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetDeviceType">kEAEExxtractorAPIGetDeviceType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetOS">kEAEExxtractorAPIGetOS</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetOSValue">kEAEExxtractorAPIGetOSValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetParameterIsAdminEnabled">kEAEExxtractorAPIGetParameterIsAdminEnabled</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetParameterPrivateChannels">kEAEExxtractorAPIGetParameterPrivateChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetParameterSession">kEAEExxtractorAPIGetParameterSession</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIGetToken">kEAEExxtractorAPIGetToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIKeyParameter">kEAEExxtractorAPIKeyParameter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIKeyPathAudioStream">kEAEExxtractorAPIKeyPathAudioStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIKeyPathChannelInfo">kEAEExxtractorAPIKeyPathChannelInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIProfileKeyParameter">kEAEExxtractorAPIProfileKeyParameter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIProfileSecretKeyParameter">kEAEExxtractorAPIProfileSecretKeyParameter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV1PathForFeaturedContent">kEAEExxtractorAPIV1PathForFeaturedContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV1PathForNetworksAudioChannels">kEAEExxtractorAPIV1PathForNetworksAudioChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV1PathForStream">kEAEExxtractorAPIV1PathForStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForData">kEAEExxtractorAPIV2PathForData</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForDocuments">kEAEExxtractorAPIV2PathForDocuments</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForFeaturedContent">kEAEExxtractorAPIV2PathForFeaturedContent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForLocalAudioChannels">kEAEExxtractorAPIV2PathForLocalAudioChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForLocation">kEAEExxtractorAPIV2PathForLocation</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForLogin">kEAEExxtractorAPIV2PathForLogin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForLogout">kEAEExxtractorAPIV2PathForLogout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForLogs">kEAEExxtractorAPIV2PathForLogs</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForNeighbors">kEAEExxtractorAPIV2PathForNeighbors</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForNetworksAudioChannels">kEAEExxtractorAPIV2PathForNetworksAudioChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForOffers">kEAEExxtractorAPIV2PathForOffers</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForStat">kEAEExxtractorAPIV2PathForStat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForState">kEAEExxtractorAPIV2PathForState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForStream">kEAEExxtractorAPIV2PathForStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV2PathForUser">kEAEExxtractorAPIV2PathForUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV3PathForLogin">kEAEExxtractorAPIV3PathForLogin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV3PathForLogout">kEAEExxtractorAPIV3PathForLogout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV3PathForOperatorLogin">kEAEExxtractorAPIV3PathForOperatorLogin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV3PathForPrivateAudioChannels">kEAEExxtractorAPIV3PathForPrivateAudioChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV3PathForStream">kEAEExxtractorAPIV3PathForStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEExxtractorAPIV3PostToken">kEAEExxtractorAPIV3PostToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEListenTechnologiesPartnerId">kEAEListenTechnologiesPartnerId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEMyePartnerId">kEAEMyePartnerId</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationBeaconDetection">kEAENotificationBeaconDetection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationBluetoothDeviceDetection">kEAENotificationBluetoothDeviceDetection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationChannelConfiguration">kEAENotificationChannelConfiguration</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationChannelsHaveBeenSyncedWithExxtractor">kEAENotificationChannelsHaveBeenSyncedWithExxtractor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationDemoModeIsStarted">kEAENotificationDemoModeIsStarted</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationExxtractorConnectionIntermittent">kEAENotificationExxtractorConnectionIntermittent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationExxtractorConnectionRecovered">kEAENotificationExxtractorConnectionRecovered</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationExxtractorConnectionWasInterrupted">kEAENotificationExxtractorConnectionWasInterrupted</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationExxtractorDisconnectionByInterruption">kEAENotificationExxtractorDisconnectionByInterruption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationExxtractorDisconnectionByUser">kEAENotificationExxtractorDisconnectionByUser</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationFeaturedContentsHaveBeenSyncedWithExxtractor">kEAENotificationFeaturedContentsHaveBeenSyncedWithExxtractor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationLocationPermissionsChanged">kEAENotificationLocationPermissionsChanged</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationNeighborsVersionsHaveBeenUpdated">kEAENotificationNeighborsVersionsHaveBeenUpdated</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationPlaybackWasInterrupted">kEAENotificationPlaybackWasInterrupted</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationPrivateChannels">kEAENotificationPrivateChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationProximityStateDidChange">kEAENotificationProximityStateDidChange</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationSessionHasEnded">kEAENotificationSessionHasEnded</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationUpdateProfile">kEAENotificationUpdateProfile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationUpdateUIForChannels">kEAENotificationUpdateUIForChannels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAENotificationupdateUIChannelsOnServerStatusConection">kEAENotificationupdateUIChannelsOnServerStatusConection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEPlayerRTPPort">kEAEPlayerRTPPort</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEVenueServerUserLevelAdmin">kEAEVenueServerUserLevelAdmin</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEVenueServerUserLevelTechSupport">kEAEVenueServerUserLevelTechSupport</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEiOSDeviceiPad">kEAEiOSDeviceiPad</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kEAEiOSDeviceiPhone">kEAEiOSDeviceiPhone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kOperatorLogintRequestTimeout">kOperatorLogintRequestTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kStreamRequestTimeout">kStreamRequestTimeout</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@kUDPOpusDelegateInterruption">kUDPOpusDelegateInterruption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Constants.html#/c:@venueServerKey">venueServerKey</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/BAMappingType.html">BAMappingType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/BAWebServiceErrorType.html">BAWebServiceErrorType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/BAWebServiceHttpMethod.html">BAWebServiceHttpMethod</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEAudioChannelState.html">EAEAudioChannelState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEExxtractorAPIVersion.html">EAEExxtractorAPIVersion</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEExxtractorConnectionErrorCode.html">EAEExxtractorConnectionErrorCode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEExxtractorConnectionLogLevel.html">EAEExxtractorConnectionLogLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEExxtractorConnectionState.html">EAEExxtractorConnectionState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEServerStateType.html">EAEServerStateType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/EAEVenueServerUserPermission.html">EAEVenueServerUserPermission</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/GCDAsyncUdpSocketError.html">GCDAsyncUdpSocketError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TyphoonAutoInjectVisibility.html">TyphoonAutoInjectVisibility</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/TyphoonScope.html">TyphoonScope</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/enum%20%28unnamed%20at%20%2FUsers%2Felenadelgado%2FDocuments%2Fdevelopment%2Fle-app-ios-wifi-audio-sdk%2FAudioEverywhereSDK%2FAudioEverywhereSDK%2FClasses%2FBL%2FModels%2FEAEContent.h%3A13%3A1%29.html">enum (unnamed at /Users/elenadelgado/Documents/development/le-app-ios-wifi-audio-sdk/AudioEverywhereSDK/AudioEverywhereSDK/Classes/BL/Models/EAEContent.h:13:1)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/BADBConnecting.html">BADBConnecting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/BAObjectMapConfiguring.html">BAObjectMapConfiguring</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEDiscoveredVenuePolling.html">EAEDiscoveredVenuePolling</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEDiscoveredVenuePollingDelegate.html">EAEDiscoveredVenuePollingDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEDiscovering.html">EAEDiscovering</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEDiscoveringDelegate.html">EAEDiscoveringDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorAuthenticationRequesting.html">EAEExxtractorAuthenticationRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorChannelRequesting.html">EAEExxtractorChannelRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorContentRequesting.html">EAEExxtractorContentRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorDocumentRequesting.html">EAEExxtractorDocumentRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorLocationRequesting.html">EAEExxtractorLocationRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorNeighborRequesting.html">EAEExxtractorNeighborRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorServerActionsRequesting.html">EAEExxtractorServerActionsRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorServerRequesting.html">EAEExxtractorServerRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorStatsRequesting.html">EAEExxtractorStatsRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorStreamRequesting.html">EAEExxtractorStreamRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EAEExxtractorUserRequesting.html">EAEExxtractorUserRequesting</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/c:objc(pl)EAEPlaybackServiceDelegate">EAEPlaybackServiceDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/GCDAsyncUdpSocketDelegate.html">GCDAsyncUdpSocketDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TyphoonAutoInjectionConfig.html">TyphoonAutoInjectionConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TyphoonDefinitionPostProcessor.html">TyphoonDefinitionPostProcessor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/c:objc(pl)TyphoonInjectedProtocol">TyphoonInjectedProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TyphoonResource.html">TyphoonResource</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Type%20Definitions.html">Type Definitions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:BAWebServiceResponse.h@T@BAWebServiceFailureResponse">BAWebServiceFailureResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:BAWebServiceResponse.h@T@BAWebServiceSuccessResponse">BAWebServiceSuccessResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:EAEConnectionResponse.h@T@EAEConnectionFailureResponse">EAEConnectionFailureResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:EAEConnectionResponse.h@T@EAEConnectionSuccessResponse">EAEConnectionSuccessResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:EAEContent.h@T@EAEContentType">EAEContentType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:GCDAsyncUdpSocket.h@T@GCDAsyncUdpSocketReceiveFilterBlock">GCDAsyncUdpSocketReceiveFilterBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:GCDAsyncUdpSocket.h@T@GCDAsyncUdpSocketSendFilterBlock">GCDAsyncUdpSocketSendFilterBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus.h@T@OpusDecoder">OpusDecoder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus.h@T@OpusEncoder">OpusEncoder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus.h@T@OpusRepacketizer">OpusRepacketizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions/TPCircularBuffer.html">TPCircularBuffer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:TyphoonDefinition.h@T@TyphoonDefinitionBlock">TyphoonDefinitionBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:TyphoonDefinition+Option.h@T@TyphoonMatcherBlock">TyphoonMatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus_types.h@T@opus_int16">opus_int16</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus_types.h@T@opus_int32">opus_int32</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus_types.h@T@opus_uint16">opus_uint16</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Type%20Definitions.html#/c:opus_types.h@T@opus_uint32">opus_uint32</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@IsClass">IsClass</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@IsProtocol">IsProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@TPCircularBufferCleanup">TPCircularBufferCleanup</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@TPCircularBufferClear">TPCircularBufferClear</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferConsume">TPCircularBufferConsume</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferConsumeNoBarrier">TPCircularBufferConsumeNoBarrier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferHead">TPCircularBufferHead</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@TPCircularBufferInit">TPCircularBufferInit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferProduce">TPCircularBufferProduce</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferProduceBytes">TPCircularBufferProduceBytes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferProduceNoBarrier">TPCircularBufferProduceNoBarrier</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:TPCircularBuffer.h@F@TPCircularBufferTail">TPCircularBufferTail</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@TyphoonClassFromString">TyphoonClassFromString</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@TyphoonConfig">TyphoonConfig</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@TyphoonTypeStringFor">TyphoonTypeStringFor</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decode">opus_decode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decode_float">opus_decode_float</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decoder_create">opus_decoder_create</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decoder_ctl">opus_decoder_ctl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decoder_destroy">opus_decoder_destroy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decoder_get_nb_samples">opus_decoder_get_nb_samples</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decoder_get_size">opus_decoder_get_size</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_decoder_init">opus_decoder_init</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encode">opus_encode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encode_float">opus_encode_float</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encoder_create">opus_encoder_create</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encoder_ctl">opus_encoder_ctl</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encoder_destroy">opus_encoder_destroy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encoder_get_size">opus_encoder_get_size</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_encoder_init">opus_encoder_init</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_get_version_string">opus_get_version_string</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_multistream_packet_pad">opus_multistream_packet_pad</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_multistream_packet_unpad">opus_multistream_packet_unpad</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_get_bandwidth">opus_packet_get_bandwidth</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_get_nb_channels">opus_packet_get_nb_channels</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_get_nb_frames">opus_packet_get_nb_frames</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_get_nb_samples">opus_packet_get_nb_samples</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_get_samples_per_frame">opus_packet_get_samples_per_frame</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_pad">opus_packet_pad</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_parse">opus_packet_parse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_packet_unpad">opus_packet_unpad</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_pcm_soft_clip">opus_pcm_soft_clip</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_cat">opus_repacketizer_cat</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_create">opus_repacketizer_create</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_destroy">opus_repacketizer_destroy</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_get_nb_frames">opus_repacketizer_get_nb_frames</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_get_size">opus_repacketizer_get_size</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_init">opus_repacketizer_init</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_out">opus_repacketizer_out</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_repacketizer_out_range">opus_repacketizer_out_range</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/c:@F@opus_strerror">opus_strerror</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs.html#/c:@S@OpusDecoder">OpusDecoder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/c:@S@OpusEncoder">OpusEncoder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs.html#/c:@S@OpusRepacketizer">OpusRepacketizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/TPCircularBuffer.html">TPCircularBuffer</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>TyphoonComponentFactory</h1>
+              <div class="declaration">
+                <div class="language">
+                  <p class="aside-title">Objective-C</p>
+                  <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">TyphoonComponentFactory</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="p">{</span>
+  <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_registry</span><span class="p">;</span>
+  <span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a></span><span class="o">&gt;</span> <span class="n">_singletons</span><span class="p">;</span>
+  <span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a></span><span class="o">&gt;</span> <span class="n">_objectGraphSharedInstances</span><span class="p">;</span>
+  <span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a></span><span class="o">&gt;</span> <span class="n">_weakSingletons</span><span class="p">;</span>
+  <span class="n">TyphoonCallStack</span> <span class="o">*</span><span class="n">_stack</span><span class="p">;</span>
+  <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_factoryPostProcessors</span><span class="p">;</span>
+  <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_componentPostProcessors</span><span class="p">;</span>
+  <span class="n">BOOL</span> <span class="n">_isLoading</span><span class="p">;</span>
+<span class="p">}</span></code></pre>
+
+                </div>
+                <div class="language">
+                  <p class="aside-title">Swift</p>
+                  <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">TyphoonComponentFactory</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>@ingroup Factory</p>
+
+<p>This is the base class for all component factories. It defines methods for retrieving components from the factory, as well as a low-level
+ API for assembling components from their constituent parts. This low-level API could be used as-is, however its intended to use a higher
+ level abstraction such as TyphoonBlockComponentFactory.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_registry"></a>
+                    <a name="//apple_ref/objc/Ivar/_registry" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_registry">_registry</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_registry</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_singletons"></a>
+                    <a name="//apple_ref/objc/Ivar/_singletons" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_singletons">_singletons</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">id</span> <span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a></span><span class="o">&gt;</span> <span class="n">_singletons</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_objectGraphSharedInstances"></a>
+                    <a name="//apple_ref/objc/Ivar/_objectGraphSharedInstances" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_objectGraphSharedInstances">_objectGraphSharedInstances</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">id</span> <span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a></span><span class="o">&gt;</span> <span class="n">_objectGraphSharedInstances</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_weakSingletons"></a>
+                    <a name="//apple_ref/objc/Ivar/_weakSingletons" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_weakSingletons">_weakSingletons</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">id</span> <span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonComponentsPool.html">TyphoonComponentsPool</a></span><span class="o">&gt;</span> <span class="n">_weakSingletons</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_stack"></a>
+                    <a name="//apple_ref/objc/Ivar/_stack" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_stack">_stack</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">TyphoonCallStack</span> <span class="o">*</span><span class="n">_stack</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_factoryPostProcessors"></a>
+                    <a name="//apple_ref/objc/Ivar/_factoryPostProcessors" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_factoryPostProcessors">_factoryPostProcessors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_factoryPostProcessors</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_componentPostProcessors"></a>
+                    <a name="//apple_ref/objc/Ivar/_componentPostProcessors" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_componentPostProcessors">_componentPostProcessors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_componentPostProcessors</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory@_isLoading"></a>
+                    <a name="//apple_ref/objc/Ivar/_isLoading" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory@_isLoading">_isLoading</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="n">BOOL</span> <span class="n">_isLoading</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(py)singletons"></a>
+                    <a name="//apple_ref/objc/Property/singletons" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(py)singletons">singletons</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The instantiated singletons.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">singletons</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">singletons</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(py)loaded"></a>
+                    <a name="//apple_ref/objc/Property/loaded" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(py)loaded">loaded</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Say if the factory has been loaded.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">getter</span><span class="o">=</span><span class="n">isLoaded</span><span class="p">)</span> <span class="n">BOOL</span> <span class="n">loaded</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isLoaded</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(py)factoryPostProcessors"></a>
+                    <a name="//apple_ref/objc/Property/factoryPostProcessors" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(py)factoryPostProcessors">factoryPostProcessors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The attached factory post processors.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">factoryPostProcessors</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">factoryPostProcessors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(py)componentPostProcessors"></a>
+                    <a name="//apple_ref/objc/Property/componentPostProcessors" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(py)componentPostProcessors">componentPostProcessors</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The attached component post processors.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span> <span class="n">NSArray</span> <span class="o">*</span><span class="n">componentPostProcessors</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">componentPostProcessors</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(cm)defaultFactory"></a>
+                    <a name="//apple_ref/objc/Method/+defaultFactory" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(cm)defaultFactory">+defaultFactory</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the default component factory, if one has been set. - see: [TyphoonComponentFactory makeDefault]. This allows resolving components
+ from the Typhoon another class after the container has been set up.</p>
+
+<p>A more desirable approach, if possible - especially for a component that is also registered with the container is to use
+ TyphoonComponentFactoryAware, which injects the component factory as a dependency on the class that needs it. This latter approach
+ simplifies unit testing, in that no special approach to patching out the classes collaborators is required.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    [TyphoonComponentFactory makeDefault].
+
+</div><div class="aside aside-see">
+    <p class="aside-title">See</p>
+    TyphoonComponentFactoryAware
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">defaultFactory</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">defaultFactory</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(cm)setFactoryForResolvingFromXibs:"></a>
+                    <a name="//apple_ref/objc/Method/+setFactoryForResolvingFromXibs:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(cm)setFactoryForResolvingFromXibs:">+setFactoryForResolvingFromXibs:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setFactoryForResolvingFromXibs</span><span class="p">:(</span><span class="n">TyphoonComponentFactory</span> <span class="o">*</span><span class="p">)</span><span class="nv">factory</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">setFactoryForResolvingFromXibs</span><span class="p">(</span><span class="n">_</span> <span class="nv">factory</span><span class="p">:</span> <span class="kt">TyphoonComponentFactory</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(cm)factoryForResolvingFromXibs"></a>
+                    <a name="//apple_ref/objc/Method/+factoryForResolvingFromXibs" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(cm)factoryForResolvingFromXibs">+factoryForResolvingFromXibs</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Factory used to resolve definition from TyphoonLoadedView.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="n">TyphoonComponentFactory</span> <span class="o">*</span><span class="p">)</span><span class="n">factoryForResolvingFromXibs</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">forResolvingFromXibs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">TyphoonComponentFactory</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)load"></a>
+                    <a name="//apple_ref/objc/Method/-load" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)load">-load</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Mutate the component definitions and
+build the not-lazy singletons.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">load</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">load</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)unload"></a>
+                    <a name="//apple_ref/objc/Method/-unload" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)unload">-unload</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Dump all the singletons.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">unload</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">unload</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)makeDefault"></a>
+                    <a name="//apple_ref/objc/Method/-makeDefault" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)makeDefault">-makeDefault</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+<ul>
+<li>from the Typhoon another class after the container has been set up.
+*</li>
+<li>This method is only integrating Typhoon into legacy environments - classes not managed by Typhoon, and its use elsewhere is discouraged</li>
+<li>as it will create a hard-wired dependency on Typhoon, whenever the default factory is retrieved.
+*</li>
+<li>A more desirable approach is to use TyphoonComponentFactoryAware or to inject the factory via an assembly. This simplifies unit testing.
+*</li>
+<li>## Alternative approach: inject the factory (in this case posing behind a TyphoonAssembly subclass):</li>
+</ul>
+<pre class="highlight objective_c"><code>
+<span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">loyaltyManagementController</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">TyphoonDefinition</span> <span class="nf">withClass</span><span class="p">:[</span><span class="n">LoyaltyManagementViewController</span> <span class="nf">class</span><span class="p">]</span>
+        <span class="nl">properties:</span><span class="o">^</span><span class="p">(</span><span class="n">TyphoonDefinition</span><span class="o">*</span> <span class="n">definition</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">definition</span><span class="p">.</span><span class="n">scope</span> <span class="o">=</span> <span class="n">TyphoonScopePrototype</span><span class="p">;</span>
+        <span class="c1">//Inject the TyphoonComponentFactory posing as an assembly</span>
+        <span class="p">[</span><span class="n">definition</span> <span class="nf">injectProperty</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">assembly</span><span class="p">)];</span>
+    <span class="p">}];</span>
+<span class="p">}</span>
+
+</code></pre>
+
+<ul>
+<li>- see: [TyphoonComponentFactory makeDefault].</li>
+<li>- see: TyphoonComponentFactoryAware
+*</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">makeDefault</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">makeDefault</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)registerDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-registerDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)registerDefinition:">-registerDefinition:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Registers a component into the factory. Components can be declared in any order, the container will work out how to resolve them.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">registerDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="n">_</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)componentForType:"></a>
+                    <a name="//apple_ref/objc/Method/-componentForType:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)componentForType:">-componentForType:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+<ul>
+<li>@exception NSInvalidArgumentException When no singletons or prototypes match the requested type.</li>
+<li>@exception NSInvalidArgumentException When when more than one singleton or prototype matches the requested type.
+*</li>
+<li>- warning: componentForType with a protocol argument is not currently supported in Objective-C++.
+*</li>
+<li>@see: allComponentsForType:</li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">componentForType</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">classOrProtocol</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">component</span><span class="p">(</span><span class="n">forType</span> <span class="nv">classOrProtocol</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)allComponentsForType:"></a>
+                    <a name="//apple_ref/objc/Method/-allComponentsForType:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)allComponentsForType:">-allComponentsForType:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns an array objects matching the given type.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    componentForType
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">allComponentsForType</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">classOrProtocol</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">allComponents</span><span class="p">(</span><span class="n">forType</span> <span class="nv">classOrProtocol</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)componentForKey:"></a>
+                    <a name="//apple_ref/objc/Method/-componentForKey:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)componentForKey:">-componentForKey:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the component matching the given key. For the block-style, this is the name of the method on the
+TyphoonAssembly interface, although, for block-style you&rsquo;d typically use the assembly interface itself
+for component resolution.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">componentForKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">component</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)componentForKey:args:"></a>
+                    <a name="//apple_ref/objc/Method/-componentForKey:args:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)componentForKey:args:">-componentForKey:<wbr>args:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">componentForKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">args</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">args</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">component</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="nv">args</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)registry"></a>
+                    <a name="//apple_ref/objc/Method/-registry" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)registry">-registry</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="n">registry</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">registry</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)enumerateDefinitions:"></a>
+                    <a name="//apple_ref/objc/Method/-enumerateDefinitions:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)enumerateDefinitions:">-enumerateDefinitions:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">enumerateDefinitions</span><span class="p">:(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="n">definition</span><span class="p">,</span> <span class="n">NSUInteger</span> <span class="n">index</span><span class="p">,</span> <span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">**</span><span class="n">definitionToReplace</span><span class="p">,</span> <span class="n">BOOL</span> <span class="o">*</span><span class="n">stop</span><span class="p">))</span><span class="nv">block</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enumerateDefinitions</span><span class="p">(</span><span class="n">_</span> <span class="nv">block</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="p">?,</span> <span class="kt">UInt</span><span class="p">,</span> <span class="kt">AutoreleasingUnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="p">?</span><span class="o">&gt;</span><span class="p">?,</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">ObjCBool</span><span class="o">&gt;</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)attachPostProcessor:"></a>
+                    <a name="//apple_ref/objc/Method/-attachPostProcessor:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)attachPostProcessor:">-attachPostProcessor:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attach a TyphoonComponentFactoryPostProcessor to this component factory.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">attachPostProcessor</span><span class="p">:(</span><span class="n">id</span><span class="o">&lt;</span><span class="n"><a href="../Protocols/TyphoonDefinitionPostProcessor.html">TyphoonDefinitionPostProcessor</a></span><span class="o">&gt;</span><span class="p">)</span><span class="nv">postProcessor</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">attach</span><span class="p">(</span><span class="n">_</span> <span class="nv">postProcessor</span><span class="p">:</span> <span class="p">(</span><span class="n">any</span> <span class="kt"><a href="../Protocols/TyphoonDefinitionPostProcessor.html">TyphoonDefinitionPostProcessor</a></span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>postProcessor</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The post-processor to attach.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)inject:"></a>
+                    <a name="//apple_ref/objc/Method/-inject:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)inject:">-inject:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Injects the properties and methods of an object</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">inject</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">instance</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">inject</span><span class="p">(</span><span class="n">_</span> <span class="nv">instance</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)inject:withSelector:"></a>
+                    <a name="//apple_ref/objc/Method/-inject:withSelector:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)inject:withSelector:">-inject:<wbr>withSelector:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Injects the properties and methods of an object, described in definition</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">inject</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">instance</span> <span class="nf">withSelector</span><span class="p">:(</span><span class="n">SEL</span><span class="p">)</span><span class="nv">selector</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">inject</span><span class="p">(</span><span class="n">_</span> <span class="nv">instance</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">with</span> <span class="nv">selector</span><span class="p">:</span> <span class="kt">Selector</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/InstanceBuilder"></a>
+                <a name="//apple_ref/objc/Section/InstanceBuilder" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/InstanceBuilder"></a>
+                  <h3 class="section-name"><span>InstanceBuilder</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)stack"></a>
+                    <a name="//apple_ref/objc/Method/-stack" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)stack">-stack</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">TyphoonCallStack</span> <span class="o">*</span><span class="p">)</span><span class="n">stack</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">stack</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">TyphoonCallStack</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)buildInstanceWithDefinition:args:"></a>
+                    <a name="//apple_ref/objc/Method/-buildInstanceWithDefinition:args:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)buildInstanceWithDefinition:args:">-buildInstanceWithDefinition:<wbr>args:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">buildInstanceWithDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span> <span class="nf">args</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">args</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">buildInstance</span><span class="p">(</span><span class="n">with</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">args</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)buildSharedInstanceForDefinition:args:"></a>
+                    <a name="//apple_ref/objc/Method/-buildSharedInstanceForDefinition:args:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)buildSharedInstanceForDefinition:args:">-buildSharedInstanceForDefinition:<wbr>args:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">buildSharedInstanceForDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span> <span class="nf">args</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">args</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">buildSharedInstance</span><span class="p">(</span><span class="k">for</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">args</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)doInjectionEventsOn:withDefinition:args:"></a>
+                    <a name="//apple_ref/objc/Method/-doInjectionEventsOn:withDefinition:args:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)doInjectionEventsOn:withDefinition:args:">-doInjectionEventsOn:<wbr>withDefinition:<wbr>args:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">doInjectionEventsOn</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">instance</span> <span class="nf">withDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span> <span class="nf">args</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">args</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">doInjectionEvents</span><span class="p">(</span><span class="n">on</span> <span class="nv">instance</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">with</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">args</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)allDefinitionsForType:"></a>
+                    <a name="//apple_ref/objc/Method/-allDefinitionsForType:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)allDefinitionsForType:">-allDefinitionsForType:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">allDefinitionsForType</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">classOrProtocol</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">allDefinitions</span><span class="p">(</span><span class="n">forType</span> <span class="nv">classOrProtocol</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)allDefinitionsForType:includeSubclasses:"></a>
+                    <a name="//apple_ref/objc/Method/-allDefinitionsForType:includeSubclasses:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)allDefinitionsForType:includeSubclasses:">-allDefinitionsForType:<wbr>includeSubclasses:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">allDefinitionsForType</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">classOrProtocol</span> <span class="nf">includeSubclasses</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">includeSubclasses</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">allDefinitions</span><span class="p">(</span><span class="n">forType</span> <span class="nv">classOrProtocol</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="nv">includeSubclasses</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)definitionForType:"></a>
+                    <a name="//apple_ref/objc/Method/-definitionForType:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)definitionForType:">-definitionForType:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nf">definitionForType</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">classOrProtocol</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">definition</span><span class="p">(</span><span class="n">forType</span> <span class="nv">classOrProtocol</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)definitionForType:orNil:includeSubclasses:"></a>
+                    <a name="//apple_ref/objc/Method/-definitionForType:orNil:includeSubclasses:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)definitionForType:orNil:includeSubclasses:">-definitionForType:<wbr>orNil:<wbr>includeSubclasses:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nf">definitionForType</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">classOrProtocol</span> <span class="nf">orNil</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">returnNilIfNotFound</span> <span class="nf">includeSubclasses</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">includeSubclasses</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">definition</span><span class="p">(</span><span class="n">forType</span> <span class="nv">classOrProtocol</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">orNil</span> <span class="nv">returnNilIfNotFound</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">includeSubclasses</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)registerInstance:asSingletonForDefinition:"></a>
+                    <a name="//apple_ref/objc/Method/-registerInstance:asSingletonForDefinition:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)registerInstance:asSingletonForDefinition:">-registerInstance:<wbr>asSingletonForDefinition:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">registerInstance</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">instance</span> <span class="nf">asSingletonForDefinition</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">definition</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">registerInstance</span><span class="p">(</span><span class="n">_</span> <span class="nv">instance</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">,</span> <span class="n">asSingletonFor</span> <span class="nv">definition</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonDefinition.html">TyphoonDefinition</a></span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)injectAssemblyOnInstanceIfTyphoonAware:"></a>
+                    <a name="//apple_ref/objc/Method/-injectAssemblyOnInstanceIfTyphoonAware:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)injectAssemblyOnInstanceIfTyphoonAware:">-injectAssemblyOnInstanceIfTyphoonAware:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">injectAssemblyOnInstanceIfTyphoonAware</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">instance</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">injectAssembly</span><span class="p">(</span><span class="n">onInstanceIfTyphoonAware</span> <span class="nv">instance</span><span class="p">:</span> <span class="kt">Any</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TyphoonComponentFactory(im)resolveCircularDependency:args:resolvedBlock:"></a>
+                    <a name="//apple_ref/objc/Method/-resolveCircularDependency:args:resolvedBlock:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TyphoonComponentFactory(im)resolveCircularDependency:args:resolvedBlock:">-resolveCircularDependency:<wbr>args:<wbr>resolvedBlock:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">resolveCircularDependency</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span> <span class="nf">args</span><span class="p">:(</span><span class="n"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span> <span class="o">*</span><span class="p">)</span><span class="nv">args</span> <span class="nf">resolvedBlock</span><span class="p">:(</span><span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="p">)(</span><span class="n">BOOL</span> <span class="n">isCircular</span><span class="p">))</span><span class="nv">resolvedBlock</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">resolveCircularDependency</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span><span class="p">,</span> <span class="nv">args</span><span class="p">:</span> <span class="kt"><a href="../Classes/TyphoonRuntimeArguments.html">TyphoonRuntimeArguments</a></span><span class="o">!</span><span class="p">,</span> <span class="nv">resolvedBlock</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span><span class="o">!</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>Listen Technologies Wifi Audio iOS SDK 7.0.1</p>
+          <p>&copy; 2024 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2024-09-12)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>model</key>
+	<string>model</string>
+	<key>serial_number</key>
+	<string>serial_number</string>
+	<key>sw_version</key>
+	<string>sw_version</string>
+	<key>venue_leid</key>
+	<string>venue_leid</string>
+</dict>
+</plist>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>location_name</key>
+	<string>locationName</string>
+	<key>location_logo_url</key>
+	<string>locationLogoUrl</string>
+	<key>location_back_url</key>
+	<string>locationBackUrl</string>
+	<key>location_tablet_back_url</key>
+	<string>locationTabletBackUrl</string>
+	<key>location_dialog_url</key>
+	<string>locationDialogUrl</string>
+	<key>location_tablet_dialog_url</key>
+	<string>locationTabletDialogUrl</string>
+	<key>ad_type</key>
+	<string>adType</string>
+	<key>ad_small_img_url</key>
+	<string>adSmallImageUrl</string>
+	<key>ad_large_img_url</key>
+	<string>adLargeImagUrl</string>
+	<key>ad_video_url</key>
+	<string>adVideoUrl</string>
+	<key>ad_skip_time</key>
+	<string>adSkipTime</string>
+	<key>ad_skip_enabled</key>
+	<string>adSkipEnabled</string>
+	<key>exxtractor_unique_identifier</key>
+	<string>exxtractorUniqueIdentifier</string>
+	<key>exxtractor_version</key>
+	<string>exxtractorVersion</string>
+</dict>
+</plist>

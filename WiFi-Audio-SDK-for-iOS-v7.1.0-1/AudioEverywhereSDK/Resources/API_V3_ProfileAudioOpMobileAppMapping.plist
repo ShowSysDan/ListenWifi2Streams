@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>is_enabled</key>
+	<string>isEnabled</string>
+	<key>image_url</key>
+	<string>imageUrl</string>
+	<key>large_image_url</key>
+	<string>largeImageUrl</string>
+	<key>description</key>
+	<string>channelDescription</string>
+	<key>channel_color</key>
+	<string>channelColor</string>
+	<key>is_available</key>
+	<string>isAvailable</string>
+	<key>background_color</key>
+	<string>channelBackgroundColor</string>
+	<key>playing_image_url</key>
+	<string>channelPlayingImageUrl</string>
+</dict>
+</plist>

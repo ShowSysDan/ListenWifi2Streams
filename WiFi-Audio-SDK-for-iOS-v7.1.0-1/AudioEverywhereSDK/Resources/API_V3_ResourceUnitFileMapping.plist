@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>input</key>
+	<string>input</string>
+	<key>stereo</key>
+	<string>stereo</string>
+	<key>delay</key>
+	<string>delay</string>
+	<key>gain</key>
+	<string>gain</string>
+</dict>
+</plist>

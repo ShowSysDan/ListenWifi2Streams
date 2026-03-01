@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>serialNumber</key>
+	<string>serialNumber</string>
+	<key>hardDrive.used</key>
+	<string>hardDriveUsed</string>
+	<key>hardDrive.total</key>
+	<string>hardDriveTotal</string>
+	<key>hardDrive.free</key>
+	<string>hardDriveFree</string>
+	<key>paMode</key>
+	<string>paMode</string>
+	<key>version</key>
+	<string>version</string>
+	<key>debugLevel</key>
+	<string>debugLevel</string>
+</dict>
+</plist>
