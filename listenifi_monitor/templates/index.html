@@ -656,11 +656,16 @@ function renderChannels() {
     const isActive = ch.status === "active" || ch.status === "requesting";
     const clients  = ch.active_clients || 0;
     const packets  = ch.packets_in || 0;
+    const srvSessions = ch.currentSessions || 0;
+    const rms      = ch.rmsVoltage || 0;
+    const bgColor  = ch.backgroundColor ? `#${ch.backgroundColor}` : null;
+    const numStyle = bgColor ? `style="background:${bgColor};color:#000"` : "";
+    const unavail  = ch.isAvailable === false;
 
     return `
     <div class="ch-card ${statusClass}" id="ch-${esc(ch.number)}">
       <div class="ch-header">
-        <div class="ch-num">${esc(ch.number)}</div>
+        <div class="ch-num" ${numStyle}>${esc(ch.number)}</div>
         <div class="ch-meta">
           ${ch.server_host ? `<div class="ch-server">${esc(ch.server_host)}</div>` : ""}
           <div class="ch-title" title="${esc(ch.title)}">${esc(ch.title)}</div>
@@ -669,8 +674,10 @@ function renderChannels() {
       </div>
 
       <div class="ch-badges">
-        ${ch.isPA      ? '<span class="badge badge-pa">PA</span>'          : ""}
-        ${ch.isPrivate ? '<span class="badge badge-private">Private</span>': ""}
+        ${ch.isPA      ? '<span class="badge badge-pa">PA</span>'            : ""}
+        ${ch.isPrivate ? '<span class="badge badge-private">Private</span>'  : ""}
+        ${unavail      ? '<span class="badge badge-private">Unavailable</span>' : ""}
+        ${ch.codecParams ? `<span class="badge" style="background:#1a3a2a;color:#2ecc71">${esc(ch.codecParams)}</span>` : ""}
       </div>
 
       <div class="ch-status">
@@ -678,6 +685,8 @@ function renderChannels() {
         <span>${statusLabel}</span>
         <span class="ch-stats">
           ${isActive ? `${packets} pkts · ${clients} client${clients !== 1 ? "s" : ""}` : ""}
+          ${srvSessions > 0 && !isActive ? `${srvSessions} server session${srvSessions !== 1 ? "s" : ""}` : ""}
+          ${rms > 0 ? ` · ${rms}V` : ""}
         </span>
       </div>
 
@@ -688,7 +697,7 @@ function renderChannels() {
 
       <div class="ch-controls">
         <button class="btn btn-start" onclick="startChannel('${esc(ch.number)}')"
-          ${isActive ? "disabled" : ""}>
+          ${isActive || unavail ? "disabled" : ""}>
           ▶ Start
         </button>
         <button class="btn btn-stop"  onclick="stopChannel('${esc(ch.number)}')"
