@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ListenWifi Monitor</title>
+<style>
+  :root {
+    --bg:       #0f1117;
+    --surface:  #1a1d26;
+    --border:   #2a2e3f;
+    --accent:   #4f8ef7;
+    --green:    #2ecc71;
+    --yellow:   #f1c40f;
+    --red:      #e74c3c;
+    --grey:     #7f8c8d;
+    --text:     #e8eaf0;
+    --subtext:  #8892a4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header h1 span { color: var(--accent); }
+
+  #scan-badge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--subtext);
+  }
+  #scan-badge .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; }
+    50%      { opacity:.3; }
+  }
+
+  /* ── Layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    height: calc(100vh - 53px);
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px;
+    overflow-y: auto;
+  }
+  aside h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--subtext); margin-bottom: 12px; }
+
+  .server-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .server-card .sname { font-weight: 600; word-break: break-all; margin-bottom: 4px; }
+  .server-card .saddr { color: var(--subtext); font-size: 12px; }
+
+  .no-servers {
+    color: var(--subtext);
+    font-size: 12px;
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  /* ── Main ── */
+  main {
+    padding: 20px 24px;
+    overflow-y: auto;
+  }
+
+  /* VLC hint bar */
+  .hint-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: var(--subtext);
+    line-height: 1.6;
+  }
+  .hint-bar strong { color: var(--text); }
+  .hint-bar code {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: monospace;
+    color: var(--accent);
+  }
+
+  /* ── Channel grid ── */
+  #channel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .ch-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color .2s;
+  }
+  .ch-card.active  { border-color: var(--green); }
+  .ch-card.error   { border-color: var(--red); }
+
+  .ch-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ch-num {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .ch-meta { flex: 1; overflow: hidden; }
+  .ch-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-subtitle { font-size: 11px; color: var(--subtext); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .ch-badges {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .badge-pa      { background: #7d5a00; color: var(--yellow); }
+  .badge-private { background: #5a1212; color: var(--red); }
+
+  /* Status row */
+  .ch-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--subtext);
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-idle       { background: var(--grey); }
+  .dot-requesting { background: var(--yellow); animation: pulse 1s infinite; }
+  .dot-active     { background: var(--green); }
+  .dot-error      { background: var(--red); }
+
+  .ch-stats { margin-left: auto; font-size: 11px; color: var(--subtext); }
+
+  /* Stream URL row */
+  .ch-url-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ch-url {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--accent);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .btn-copy {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--subtext);
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background .15s, color .15s;
+  }
+  .btn-copy:hover { background: var(--border); color: var(--text); }
+  .btn-copy.copied { color: var(--green); }
+
+  /* Controls */
+  .ch-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .btn {
+    flex: 1;
+    padding: 7px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-start { background: var(--accent); color: #fff; }
+  .btn-start:hover { opacity: .88; }
+  .btn-stop  { background: var(--border); color: var(--text); }
+  .btn-stop:hover  { background: #3a3f52; }
+  .btn:disabled { opacity: .4; cursor: default; }
+
+  /* Empty state */
+  .empty-state {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 0;
+    color: var(--subtext);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .3s, transform .3s;
+    pointer-events: none;
+    z-index: 999;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Listen<span>Wifi</span> Monitor</h1>
+  <div id="scan-badge">
+    <div class="dot"></div>
+    <span id="scan-label">Scanning…</span>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+    <h2>Servers</h2>
+    <div id="server-list">
+      <p class="no-servers">No servers found yet.</p>
+    </div>
+  </aside>
+
+  <main>
+    <div class="hint-bar">
+      <strong>How to listen:</strong>
+      Click <strong>Start</strong> on a channel, then open VLC →
+      <em>Media → Open Network Stream</em> and enter the stream URL shown below,
+      e.g. <code>http://192.168.1.X:6001/</code>.
+      Multiple VLC instances can connect to the same channel simultaneously.
+    </div>
+
+    <div id="channel-grid">
+      <div class="empty-state">
+        <div class="icon">📡</div>
+        <p>Waiting for ListenWifi servers on your network…</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<!-- Socket.IO from CDN -->
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+"use strict";
+
+const socket = io({ transports: ["websocket", "polling"] });
+
+// ── State ────────────────────────────────────────────────────────────────
+let state = { servers: [], channels: [] };
+
+// ── Socket events ─────────────────────────────────────────────────────────
+socket.on("connect", () => {
+  document.getElementById("scan-label").textContent = "Connected";
+  socket.emit("refresh");
+});
+
+socket.on("disconnect", () => {
+  document.getElementById("scan-label").textContent = "Disconnected";
+});
+
+socket.on("state_update", (data) => {
+  state = data;
+  render();
+});
+
+socket.on("channel_action_result", (data) => {
+  if (!data.ok && data.error) {
+    toast("Error: " + data.error, "error");
+  }
+});
+
+// ── Rendering ─────────────────────────────────────────────────────────────
+function render() {
+  renderServers();
+  renderChannels();
+  const count = state.channels.length;
+  const active = state.channels.filter(c => c.status === "active").length;
+  document.getElementById("scan-label").textContent =
+    count ? `${count} channel${count !== 1 ? "s" : ""} · ${active} active` : "Scanning…";
+}
+
+function renderServers() {
+  const el = document.getElementById("server-list");
+  if (!state.servers.length) {
+    el.innerHTML = '<p class="no-servers">No servers found yet.</p>';
+    return;
+  }
+  el.innerHTML = state.servers.map(s => `
+    <div class="server-card">
+      <div class="sname">${esc(s.friendly_name || s.name.split(".")[0])}</div>
+      <div class="saddr">${esc(s.host)}:${s.port}</div>
+    </div>
+  `).join("");
+}
+
+function renderChannels() {
+  const grid = document.getElementById("channel-grid");
+  if (!state.channels.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📡</div>
+        <p>Waiting for ListenWifi servers on your network…</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = state.channels.map(ch => {
+    const statusClass = ch.status === "active" ? "active" : ch.status === "error" ? "error" : "";
+    const dotClass = {
+      idle:       "dot-idle",
+      requesting: "dot-requesting",
+      active:     "dot-active",
+      error:      "dot-error",
+    }[ch.status] || "dot-idle";
+
+    const statusLabel = {
+      idle:       "Idle",
+      requesting: "Requesting…",
+      active:     "Receiving RTP",
+      error:      "Error",
+    }[ch.status] || ch.status;
+
+    const isActive = ch.status === "active" || ch.status === "requesting";
+    const clients  = ch.active_clients || 0;
+    const packets  = ch.packets_in || 0;
+
+    return `
+    <div class="ch-card ${statusClass}" id="ch-${esc(ch.number)}">
+      <div class="ch-header">
+        <div class="ch-num">${esc(ch.number)}</div>
+        <div class="ch-meta">
+          <div class="ch-title" title="${esc(ch.title)}">${esc(ch.title)}</div>
+          ${ch.subtitle ? `<div class="ch-subtitle">${esc(ch.subtitle)}</div>` : ""}
+        </div>
+      </div>
+
+      <div class="ch-badges">
+        ${ch.isPA      ? '<span class="badge badge-pa">PA</span>'          : ""}
+        ${ch.isPrivate ? '<span class="badge badge-private">Private</span>': ""}
+      </div>
+
+      <div class="ch-status">
+        <div class="status-dot ${dotClass}"></div>
+        <span>${statusLabel}</span>
+        <span class="ch-stats">
+          ${isActive ? `${packets} pkts · ${clients} client${clients !== 1 ? "s" : ""}` : ""}
+        </span>
+      </div>
+
+      <div class="ch-url-row">
+        <div class="ch-url" title="${esc(ch.stream_url)}">${esc(ch.stream_url)}</div>
+        <button class="btn-copy" onclick="copyUrl('${esc(ch.stream_url)}', this)">Copy</button>
+      </div>
+
+      <div class="ch-controls">
+        <button class="btn btn-start" onclick="startChannel('${esc(ch.number)}')"
+          ${isActive ? "disabled" : ""}>
+          ▶ Start
+        </button>
+        <button class="btn btn-stop"  onclick="stopChannel('${esc(ch.number)}')"
+          ${!isActive ? "disabled" : ""}>
+          ■ Stop
+        </button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────
+function startChannel(num) {
+  socket.emit("start_channel", { channel_number: num });
+  toast(`Starting channel ${num}…`);
+}
+
+function stopChannel(num) {
+  socket.emit("stop_channel", { channel_number: num });
+  toast(`Stopping channel ${num}…`);
+}
+
+function copyUrl(url, btn) {
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = "Copied!";
+    btn.classList.add("copied");
+    setTimeout(() => {
+      btn.textContent = "Copy";
+      btn.classList.remove("copied");
+    }, 1500);
+  });
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+let _toastTimer;
+function toast(msg, type) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.style.borderColor = type === "error" ? "var(--red)" : "var(--border)";
+  el.classList.add("show");
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove("show"), 3000);
+}
+</script>
+</body>
+</html>
