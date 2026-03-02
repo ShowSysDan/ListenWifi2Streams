@@ -162,6 +162,7 @@
   .ch-meta { flex: 1; overflow: hidden; }
   .ch-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ch-subtitle { font-size: 11px; color: var(--subtext); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-server   { font-size: 10px; color: var(--subtext); margin-bottom: 2px; font-family: monospace; letter-spacing: .2px; }
 
   .ch-badges {
     display: flex;
@@ -413,6 +414,7 @@ function renderChannels() {
       <div class="ch-header">
         <div class="ch-num">${esc(ch.number)}</div>
         <div class="ch-meta">
+          ${ch.server_host ? `<div class="ch-server">${esc(ch.server_host)}</div>` : ""}
           <div class="ch-title" title="${esc(ch.title)}">${esc(ch.title)}</div>
           ${ch.subtitle ? `<div class="ch-subtitle">${esc(ch.subtitle)}</div>` : ""}
         </div>
