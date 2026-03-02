@@ -15,7 +15,9 @@ RTP packet structure (RFC 3550):
     Payload: Opus-encoded audio frame
 """
 
+import ctypes
 import logging
+import os
 import socket
 import struct
 import threading
@@ -30,6 +32,22 @@ OPUS_CHANNELS = 1  # mono; most ListenWifi channels are mono
 
 # Maximum UDP datagram we'll read (Opus frames are typically < 1500 bytes)
 MAX_UDP_BYTES = 4096
+
+# ---------------------------------------------------------------------------
+# Pre-load opus shared library from the script directory before opuslib tries
+# to find it.  On Windows, ctypes only searches PATH — not the script folder —
+# so opus.dll placed alongside app.py would otherwise be silently ignored.
+# ---------------------------------------------------------------------------
+_here = os.path.dirname(os.path.abspath(__file__))
+for _dll_name in ("opus.dll", "libopus.dll", "libopus-0.dll"):
+    _dll_path = os.path.join(_here, _dll_name)
+    if os.path.exists(_dll_path):
+        try:
+            ctypes.CDLL(_dll_path)
+            logger.debug("Pre-loaded %s from script directory", _dll_name)
+        except OSError as _e:
+            logger.warning("Found %s but could not load it: %s", _dll_path, _e)
+        break
 
 # Attempt to import opuslib; degrade gracefully if libopus is not installed
 try:

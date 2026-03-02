@@ -1,36 +1,39 @@
 """
 app.py — ListenWifi Audio Stream Monitor
-Flask web dashboard (port 6000) + per-channel MP3 relay (ports 6001+).
+Flask web dashboard (port 7000) + per-channel MP3 relay (ports 7001+).
 
 Port assignment (IP-sorted):
   Channels are sorted by (server_ip_ascending, channel_number_ascending) and
-  assigned ports 6001, 6002, … in that order.
+  assigned ports 7001, 7002, … in that order.
 
   Example — 6 servers × 2 channels each:
-    192.168.1.10  ch.1 → 6001
-    192.168.1.10  ch.2 → 6002
-    192.168.1.20  ch.1 → 6003
-    192.168.1.20  ch.2 → 6004
+    192.168.1.10  ch.1 → 7001
+    192.168.1.10  ch.2 → 7002
+    192.168.1.20  ch.1 → 7003
+    192.168.1.20  ch.2 → 7004
     ...
-    192.168.1.60  ch.2 → 6012
+    192.168.1.60  ch.2 → 7012
 
   If a new server is discovered that sorts lower than existing servers, all
   ports are recomputed and the affected stream servers are restarted.
 
 Usage:
     python app.py
-    open http://localhost:6000
+    open http://localhost:7000
 
 VLC:
     vlc http://<your-ip>:<channel-port>/
 """
 
+import json
 import logging
+import logging.handlers
+import os
 import socket
 import threading
 import time
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit
 
 from api_client import ListenWifiClient
@@ -48,6 +51,82 @@ logging.basicConfig(
 logger = logging.getLogger("app")
 
 # ---------------------------------------------------------------------------
+# Config defaults  (overridden by settings.json at startup)
+# ---------------------------------------------------------------------------
+SYSLOG_HOST: str     = ""
+SYSLOG_PORT: int     = 514
+SYSLOG_TCP:  bool    = False
+STATIC_SERVERS: list = []
+
+# ---------------------------------------------------------------------------
+# Settings persistence
+# ---------------------------------------------------------------------------
+SETTINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "settings.json")
+
+_syslog_handler: logging.Handler | None = None
+
+
+def _load_settings() -> None:
+    global STATIC_SERVERS, SYSLOG_HOST, SYSLOG_PORT, SYSLOG_TCP
+    if not os.path.exists(SETTINGS_FILE):
+        return
+    try:
+        with open(SETTINGS_FILE) as f:
+            data = json.load(f)
+        STATIC_SERVERS = data.get("static_servers", STATIC_SERVERS)
+        SYSLOG_HOST    = data.get("syslog_host",    SYSLOG_HOST)
+        SYSLOG_PORT    = int(data.get("syslog_port", SYSLOG_PORT))
+        SYSLOG_TCP     = bool(data.get("syslog_tcp",  SYSLOG_TCP))
+        logger.info("Settings loaded from %s", SETTINGS_FILE)
+    except Exception as exc:
+        logger.warning("Could not load settings.json: %s", exc)
+
+
+def _save_settings() -> None:
+    try:
+        with open(SETTINGS_FILE, "w") as f:
+            json.dump({
+                "static_servers": STATIC_SERVERS,
+                "syslog_host":    SYSLOG_HOST,
+                "syslog_port":    SYSLOG_PORT,
+                "syslog_tcp":     SYSLOG_TCP,
+            }, f, indent=2)
+    except Exception as exc:
+        logger.warning("Could not save settings.json: %s", exc)
+
+
+def _setup_syslog() -> None:
+    """Install (or replace) the remote syslog handler based on current config."""
+    global _syslog_handler
+    root = logging.getLogger()
+    if _syslog_handler is not None:
+        root.removeHandler(_syslog_handler)
+        _syslog_handler = None
+    if not SYSLOG_HOST:
+        return
+    socktype = socket.SOCK_STREAM if SYSLOG_TCP else socket.SOCK_DGRAM
+    try:
+        handler = logging.handlers.SysLogHandler(
+            address=(SYSLOG_HOST, SYSLOG_PORT),
+            socktype=socktype,
+        )
+        handler.setFormatter(logging.Formatter(
+            "listenifi: %(levelname)s %(name)s: %(message)s"
+        ))
+        root.addHandler(handler)
+        _syslog_handler = handler
+        logger.info(
+            "Syslog forwarding → %s:%d (%s)",
+            SYSLOG_HOST, SYSLOG_PORT, "TCP" if SYSLOG_TCP else "UDP",
+        )
+    except Exception as exc:
+        logger.warning("Syslog setup failed: %s", exc)
+
+
+_load_settings()
+_setup_syslog()
+
+# ---------------------------------------------------------------------------
 # Flask + SocketIO
 # ---------------------------------------------------------------------------
 app = Flask(__name__)
@@ -57,8 +136,8 @@ socketio = SocketIO(app, async_mode="threading", cors_allowed_origins="*")
 # ---------------------------------------------------------------------------
 # Ports
 # ---------------------------------------------------------------------------
-WEB_PORT    = 6000
-STREAM_BASE = 6001
+WEB_PORT    = 7000
+STREAM_BASE = 7001
 
 # ---------------------------------------------------------------------------
 # Global state  (all mutations must hold _state_lock)
@@ -121,7 +200,7 @@ def _server_channels_sorted_locked(server_name: str) -> list[dict]:
 
 def _recompute_all_ports_locked() -> None:
     """
-    Assign stream ports 6001, 6002, … ordered by (server_ip_asc, channel_num_asc).
+    Assign stream ports 7001, 7002, … ordered by (server_ip_asc, channel_num_asc).
 
     Updates _channels[*]["stream_port"] and ["stream_url"] in-place.
     Must be called with _state_lock held.
@@ -415,6 +494,45 @@ def api_state():
     return jsonify(_build_state())
 
 
+@app.route("/api/settings", methods=["GET"])
+def api_get_settings():
+    return jsonify({
+        "static_servers": STATIC_SERVERS,
+        "syslog_host":    SYSLOG_HOST,
+        "syslog_port":    SYSLOG_PORT,
+        "syslog_tcp":     SYSLOG_TCP,
+    })
+
+
+@app.route("/api/settings", methods=["POST"])
+def api_save_settings():
+    global STATIC_SERVERS, SYSLOG_HOST, SYSLOG_PORT, SYSLOG_TCP
+    data = request.get_json(force=True, silent=True) or {}
+
+    new_servers     = [str(s).strip() for s in data.get("static_servers", []) if str(s).strip()]
+    new_syslog_host = str(data.get("syslog_host", "")).strip()
+    new_syslog_port = int(data.get("syslog_port", 514))
+    new_syslog_tcp  = bool(data.get("syslog_tcp", False))
+
+    # Diff static servers and apply changes
+    old_set = set(STATIC_SERVERS)
+    new_set = set(new_servers)
+    for entry in (new_set - old_set):
+        _probe_static_entry(entry)
+    for entry in (old_set - new_set):
+        host = entry.strip().rsplit(":", 1)[0] if ":" in entry else entry.strip()
+        _on_server_removed(f"static-{host}")
+
+    STATIC_SERVERS = new_servers
+    SYSLOG_HOST    = new_syslog_host
+    SYSLOG_PORT    = new_syslog_port
+    SYSLOG_TCP     = new_syslog_tcp
+    _setup_syslog()
+    _save_settings()
+    logger.info("Settings saved via UI")
+    return jsonify({"ok": True})
+
+
 # ---------------------------------------------------------------------------
 # SocketIO events
 # ---------------------------------------------------------------------------
@@ -449,6 +567,45 @@ def handle_refresh(_data=None):
 
 
 # ---------------------------------------------------------------------------
+# Static server probing
+# ---------------------------------------------------------------------------
+
+def _probe_static_entry(entry: str) -> None:
+    """Parse and probe one 'host' or 'host:port' static server entry."""
+    entry = entry.strip()
+    if not entry:
+        return
+    if ":" in entry:
+        host, port_str = entry.rsplit(":", 1)
+        try:
+            port = int(port_str)
+        except ValueError:
+            logger.warning("Static server: invalid entry %r (bad port)", entry)
+            return
+    else:
+        host, port = entry, 80
+    server_info = {
+        "name":          f"static-{host}",
+        "host":          host,
+        "port":          port,
+        "base_url":      f"http://{host}:{port}",
+        "friendly_name": host,
+    }
+    logger.info("Static server: probing %s:%d", host, port)
+    threading.Thread(
+        target=_on_server_added,
+        args=(server_info,),
+        name=f"static-probe-{host}",
+        daemon=True,
+    ).start()
+
+
+def _probe_static_servers() -> None:
+    for entry in STATIC_SERVERS:
+        _probe_static_entry(entry)
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -465,11 +622,18 @@ if __name__ == "__main__":
         daemon=True,
     ).start()
 
+    if STATIC_SERVERS:
+        _probe_static_servers()
+
     logger.info("=" * 60)
     logger.info("ListenWifi Monitor starting")
     logger.info("  Dashboard:    http://localhost:%d", WEB_PORT)
     logger.info("  Port order:   lowest server IP → port %d, ascending", STREAM_BASE)
     logger.info("  Scanning for _exxothermic._tcp.local. …")
+    if STATIC_SERVERS:
+        logger.info("  Static servers: %s", ", ".join(STATIC_SERVERS))
+    if SYSLOG_HOST:
+        logger.info("  Syslog:         %s:%d (%s)", SYSLOG_HOST, SYSLOG_PORT, "TCP" if SYSLOG_TCP else "UDP")
     logger.info("=" * 60)
 
     try:
