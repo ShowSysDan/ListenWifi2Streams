@@ -37,6 +37,16 @@ PROBE_PATHS = [
 ]
 
 
+def _safe_json(resp) -> dict:
+    """Parse response JSON; return {} if body is empty or not valid JSON."""
+    if not resp.content:
+        return {}
+    try:
+        return resp.json()
+    except ValueError:
+        return {}
+
+
 class ListenWifiClient:
     """HTTP REST client for a single discovered ListenWifi server."""
 
@@ -160,31 +170,34 @@ class ListenWifiClient:
         client_ip: str,
         client_udp_port: int,
     ) -> dict | None:
-        # Body confirmed by inspecting V1 redirect: no deviceId
-        body = {
-            "channelNum":      channel_number,
-            "myAppIpAddress":  client_ip,
-            "myAppUdpPort":    client_udp_port,
-        }
         url = self.base_url + V2_STREAM
-        try:
-            resp = self._session.post(
-                url, json=body,
-                timeout=STREAM_TIMEOUT,
-                allow_redirects=False,
-            )
-            if resp.ok:
-                return resp.json() if resp.content else {}
-            if resp.is_redirect:
-                location = resp.headers.get("Location", "")
-                logger.info("V2 stream redirect → %s", location)
-                return self._follow_stream_redirect(location, body)
-            logger.warning(
-                "V2 stream %s → HTTP %d %s | %.300s",
-                url, resp.status_code, resp.reason, resp.text,
-            )
-        except Exception as exc:
-            logger.warning("V2 stream %s → %s", url, exc)
+        # Try multiple body/method combinations — 400 usually means wrong field type or method
+        ch_int = int(channel_number) if channel_number.isdigit() else channel_number
+        attempts = [
+            ("POST", {"channelNum": ch_int,        "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
+            ("POST", {"channelNum": channel_number, "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
+            ("GET",  {"channelNum": ch_int,        "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
+            ("GET",  {"channelNum": channel_number, "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
+        ]
+        for method, body in attempts:
+            try:
+                if method == "POST":
+                    resp = self._session.post(url, json=body, timeout=STREAM_TIMEOUT, allow_redirects=False)
+                else:
+                    resp = self._session.get(url, params=body, timeout=STREAM_TIMEOUT, allow_redirects=False)
+                if resp.ok:
+                    logger.info("V2 stream OK (%s channelNum=%s)", method, body["channelNum"])
+                    return _safe_json(resp)
+                if resp.is_redirect:
+                    location = resp.headers.get("Location", "")
+                    logger.info("V2 stream redirect → %s", location)
+                    return self._follow_stream_redirect(location, body)
+                logger.debug("V2 stream %s [%s channelNum=%s] → HTTP %d",
+                             url, method, body["channelNum"], resp.status_code)
+            except Exception as exc:
+                logger.debug("V2 stream %s [%s] → %s", url, method, exc)
+        # Log final failure after all attempts exhausted
+        logger.warning("V2 stream %s — all attempts returned 4xx/5xx", url)
         return None
 
     def _post_v1_stream(
@@ -206,7 +219,9 @@ class ListenWifiClient:
                 allow_redirects=False,  # server redirects to port 8000 which may be unreachable
             )
             if resp.ok:
-                return resp.json() if resp.content else {}
+                result = _safe_json(resp)
+                logger.info("V1 stream OK (body=%r)", resp.text[:80] if resp.content else "(empty)")
+                return result
             if resp.is_redirect:
                 location = resp.headers.get("Location", "")
                 logger.info("V1 stream redirect → %s", location)
@@ -241,7 +256,7 @@ class ListenWifiClient:
                     )
                 if resp.ok:
                     logger.info("Stream redirect %s succeeded (%s)", location, attempt.upper())
-                    return resp.json() if resp.content else {}
+                    return _safe_json(resp)
                 logger.warning(
                     "Stream redirect %s [%s] → HTTP %d %s | %.200s",
                     location, attempt.upper(), resp.status_code, resp.reason, resp.text,
