@@ -266,6 +266,139 @@
   .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
   .empty-state p { font-size: 14px; }
 
+  /* ── Settings button ── */
+  #settings-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--subtext);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 9px;
+    margin-left: 10px;
+    transition: background .15s, color .15s;
+  }
+  #settings-btn:hover { background: var(--border); color: var(--text); }
+
+  /* ── Settings modal ── */
+  #settings-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  #settings-overlay.open { display: flex; }
+
+  #settings-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: min(520px, 95vw);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-header h2 { font-size: 15px; font-weight: 600; flex: 1; }
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--subtext);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .modal-close:hover { background: var(--border); color: var(--text); }
+
+  .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+
+  .s-section { margin-bottom: 22px; }
+  .s-section:last-child { margin-bottom: 0; }
+  .s-section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--subtext);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .s-label {
+    display: block;
+    font-size: 12px;
+    color: var(--subtext);
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+  .s-label:first-of-type { margin-top: 0; }
+  .s-hint {
+    font-size: 11px;
+    color: var(--subtext);
+    margin-top: 5px;
+    opacity: .75;
+  }
+  .s-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 7px 10px;
+    font-size: 13px;
+    font-family: monospace;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .s-input:focus { border-color: var(--accent); }
+  textarea.s-input { resize: vertical; min-height: 90px; line-height: 1.6; }
+  .s-row { display: flex; gap: 10px; align-items: flex-end; }
+  .s-col { display: flex; flex-direction: column; }
+  .s-col-sm { width: 90px; flex-shrink: 0; }
+  .s-col-grow { flex: 1; }
+
+  .modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .btn-modal-cancel {
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .btn-modal-cancel:hover { background: var(--border); }
+  .btn-modal-save {
+    padding: 7px 18px;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .btn-modal-save:hover { opacity: .88; }
+  .btn-modal-save:disabled { opacity: .4; cursor: default; }
+
   /* Toast */
   #toast {
     position: fixed;
@@ -293,7 +426,56 @@
     <div class="dot"></div>
     <span id="scan-label">Scanning…</span>
   </div>
+  <button id="settings-btn" title="Settings" onclick="openSettings()">⚙</button>
 </header>
+
+<!-- Settings modal -->
+<div id="settings-overlay" onclick="overlayClick(event)">
+  <div id="settings-modal">
+    <div class="modal-header">
+      <h2>Settings</h2>
+      <button class="modal-close" onclick="closeSettings()" title="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="s-section">
+        <div class="s-section-title">Static Servers</div>
+        <label class="s-label">Server IPs — one per line (<code style="color:var(--accent)">host</code> or <code style="color:var(--accent)">host:port</code>)</label>
+        <textarea class="s-input" id="s-static-servers" rows="5"
+          placeholder="192.168.1.50&#10;192.168.1.51&#10;192.168.1.52:8080"></textarea>
+        <p class="s-hint">Probed immediately alongside mDNS. Removing an entry disconnects that server.</p>
+      </div>
+
+      <div class="s-section">
+        <div class="s-section-title">Remote Syslog</div>
+        <label class="s-label">Host (leave blank to disable)</label>
+        <input class="s-input" type="text" id="s-syslog-host"
+          placeholder="192.168.1.10 or syslog.example.com">
+        <div class="s-row" style="margin-top:12px">
+          <div class="s-col s-col-sm">
+            <label class="s-label" style="margin-top:0">Port</label>
+            <input class="s-input" type="number" id="s-syslog-port"
+              min="1" max="65535" value="514">
+          </div>
+          <div class="s-col s-col-grow">
+            <label class="s-label" style="margin-top:0">Protocol</label>
+            <select class="s-input" id="s-syslog-proto">
+              <option value="udp">UDP</option>
+              <option value="tcp">TCP</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="btn-modal-save" id="settings-save-btn" onclick="saveSettings()">Save &amp; Apply</button>
+    </div>
+  </div>
+</div>
 
 <div class="layout">
   <aside>
@@ -308,7 +490,7 @@
       <strong>How to listen:</strong>
       Click <strong>Start</strong> on a channel, then open VLC →
       <em>Media → Open Network Stream</em> and enter the stream URL shown below,
-      e.g. <code>http://192.168.1.X:6001/</code>.
+      e.g. <code>http://192.168.1.X:7001/</code>.
       Multiple VLC instances can connect to the same channel simultaneously.
     </div>
 
@@ -473,6 +655,58 @@ function copyUrl(url, btn) {
     }, 1500);
   });
 }
+
+// ── Settings modal ────────────────────────────────────────────────────────
+function openSettings() {
+  fetch("/api/settings")
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById("s-static-servers").value =
+        (data.static_servers || []).join("\n");
+      document.getElementById("s-syslog-host").value  = data.syslog_host || "";
+      document.getElementById("s-syslog-port").value  = data.syslog_port ?? 514;
+      document.getElementById("s-syslog-proto").value = data.syslog_tcp ? "tcp" : "udp";
+      document.getElementById("settings-overlay").classList.add("open");
+    })
+    .catch(e => toast("Could not load settings: " + e, "error"));
+}
+
+function closeSettings() {
+  document.getElementById("settings-overlay").classList.remove("open");
+}
+
+function overlayClick(e) {
+  if (e.target === document.getElementById("settings-overlay")) closeSettings();
+}
+
+function saveSettings() {
+  const btn = document.getElementById("settings-save-btn");
+  btn.disabled = true;
+  btn.textContent = "Saving…";
+
+  const servers = document.getElementById("s-static-servers").value
+    .split("\n").map(s => s.trim()).filter(Boolean);
+
+  fetch("/api/settings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      static_servers: servers,
+      syslog_host:    document.getElementById("s-syslog-host").value.trim(),
+      syslog_port:    parseInt(document.getElementById("s-syslog-port").value, 10) || 514,
+      syslog_tcp:     document.getElementById("s-syslog-proto").value === "tcp",
+    }),
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) { toast("Settings saved."); closeSettings(); }
+      else toast("Error: " + (data.error || "unknown"), "error");
+    })
+    .catch(e => toast("Save failed: " + e, "error"))
+    .finally(() => { btn.disabled = false; btn.textContent = "Save & Apply"; });
+}
+
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSettings(); });
 
 // ── Utilities ─────────────────────────────────────────────────────────────
 function esc(s) {
