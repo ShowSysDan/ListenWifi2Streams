@@ -36,7 +36,7 @@ import time
 from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit
 
-from api_client import ListenWifiClient
+from api_client import ListenWifiClient, probe_server
 from discovery import ListenWifiDiscovery
 from rtp_stream import RTPStreamReceiver, get_local_ip
 from stream_server import ChannelStreamServer
@@ -531,6 +531,20 @@ def api_save_settings():
     _save_settings()
     logger.info("Settings saved via UI")
     return jsonify({"ok": True})
+
+
+@app.route("/api/probe")
+def api_probe():
+    """Diagnostic: hit candidate API paths on a server and return raw results."""
+    host = request.args.get("host", "").strip()
+    try:
+        port = int(request.args.get("port", 80))
+    except ValueError:
+        return jsonify({"error": "invalid port"}), 400
+    if not host:
+        return jsonify({"error": "host required"}), 400
+    results = probe_server(host, port)
+    return jsonify({"host": host, "port": port, "results": results})
 
 
 # ---------------------------------------------------------------------------

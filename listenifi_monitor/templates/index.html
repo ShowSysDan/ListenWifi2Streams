@@ -399,6 +399,61 @@
   .btn-modal-save:hover { opacity: .88; }
   .btn-modal-save:disabled { opacity: .4; cursor: default; }
 
+  /* Probe results */
+  .probe-row {
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+  .probe-row-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--bg);
+    cursor: pointer;
+    user-select: none;
+  }
+  .probe-row-head:hover { background: #0d1018; }
+  .probe-status {
+    font-weight: 700;
+    font-family: monospace;
+    min-width: 36px;
+  }
+  .probe-status.ok  { color: var(--green); }
+  .probe-status.err { color: var(--red); }
+  .probe-path { flex: 1; font-family: monospace; color: var(--subtext); }
+  .probe-ct   { font-size: 11px; color: var(--subtext); }
+  .probe-body {
+    display: none;
+    padding: 8px 10px;
+    background: #0a0c12;
+    font-family: monospace;
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: var(--text);
+    max-height: 180px;
+    overflow-y: auto;
+    border-top: 1px solid var(--border);
+  }
+  .probe-body.open { display: block; }
+  #probe-run-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  #probe-run-btn:disabled { opacity: .4; cursor: default; }
+  #probe-results { margin-top: 12px; }
+
   /* Toast */
   #toast {
     position: fixed;
@@ -466,6 +521,17 @@
             </select>
           </div>
         </div>
+      </div>
+
+      <div class="s-section">
+        <div class="s-section-title">API Diagnostics</div>
+        <label class="s-label">Server to probe (<code style="color:var(--accent)">host</code> or <code style="color:var(--accent)">host:port</code>)</label>
+        <div class="s-row">
+          <input class="s-input" type="text" id="probe-host" placeholder="192.168.1.50">
+          <button id="probe-run-btn" onclick="runProbe()">Probe</button>
+        </div>
+        <p class="s-hint">Hits common API paths and shows the raw response — click any row to expand.</p>
+        <div id="probe-results"></div>
       </div>
 
     </div>
@@ -666,6 +732,10 @@ function openSettings() {
       document.getElementById("s-syslog-host").value  = data.syslog_host || "";
       document.getElementById("s-syslog-port").value  = data.syslog_port ?? 514;
       document.getElementById("s-syslog-proto").value = data.syslog_tcp ? "tcp" : "udp";
+      // Pre-fill probe host from first static server
+      const firstServer = (data.static_servers || [])[0] || "";
+      if (firstServer) document.getElementById("probe-host").value = firstServer;
+      document.getElementById("probe-results").innerHTML = "";
       document.getElementById("settings-overlay").classList.add("open");
     })
     .catch(e => toast("Could not load settings: " + e, "error"));
@@ -707,6 +777,54 @@ function saveSettings() {
 }
 
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeSettings(); });
+
+// ── API Diagnostics ───────────────────────────────────────────────────────
+function runProbe() {
+  const raw  = document.getElementById("probe-host").value.trim();
+  if (!raw) { toast("Enter a host to probe", "error"); return; }
+
+  let host = raw, port = 80;
+  if (raw.includes(":")) {
+    const parts = raw.split(":");
+    host = parts[0];
+    port = parseInt(parts[1], 10) || 80;
+  }
+
+  const btn = document.getElementById("probe-run-btn");
+  const out = document.getElementById("probe-results");
+  btn.disabled = true;
+  btn.textContent = "Probing…";
+  out.innerHTML = '<p class="s-hint" style="margin-top:8px">Contacting server…</p>';
+
+  fetch(`/api/probe?host=${encodeURIComponent(host)}&port=${port}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) { out.innerHTML = `<p class="s-hint" style="color:var(--red)">${esc(data.error)}</p>`; return; }
+      out.innerHTML = data.results.map((r, i) => {
+        const ok = r.status && r.status < 400;
+        const statusText = r.status != null ? r.status : "ERR";
+        const body = r.error
+          ? `Error: ${r.error}`
+          : `HTTP ${r.status} ${r.reason || ""}\nContent-Type: ${r.content_type || "(none)"}\n\n${r.body || "(empty response)"}`;
+        return `
+          <div class="probe-row">
+            <div class="probe-row-head" onclick="toggleProbeBody(${i})">
+              <span class="probe-status ${ok ? 'ok' : 'err'}">${statusText}</span>
+              <span class="probe-path">${esc(r.path)}</span>
+              <span class="probe-ct">${esc((r.content_type || "").split(";")[0])}</span>
+              <span style="color:var(--subtext);font-size:11px">${ok ? "▼" : "▷"}</span>
+            </div>
+            <pre id="probe-body-${i}" class="probe-body${ok ? ' open' : ''}">${esc(body)}</pre>
+          </div>`;
+      }).join("");
+    })
+    .catch(e => { out.innerHTML = `<p class="s-hint" style="color:var(--red)">Request failed: ${esc(String(e))}</p>`; })
+    .finally(() => { btn.disabled = false; btn.textContent = "Probe"; });
+}
+
+function toggleProbeBody(i) {
+  document.getElementById(`probe-body-${i}`).classList.toggle("open");
+}
 
 // ── Utilities ─────────────────────────────────────────────────────────────
 function esc(s) {

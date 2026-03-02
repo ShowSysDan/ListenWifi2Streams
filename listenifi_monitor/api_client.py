@@ -7,7 +7,6 @@ No authentication is attempted (public/open channels).
 
 import logging
 import uuid
-from typing import Any
 
 import requests
 
@@ -24,6 +23,18 @@ V1_STREAM    = "/api/myapp/channels"
 
 REQUEST_TIMEOUT = 5  # seconds
 
+# Candidate paths tried by probe_server() for diagnostics
+PROBE_PATHS = [
+    V2_CHANNELS,
+    V1_CHANNELS,
+    "/exxtractor/api/v2/channels",
+    "/api/channels",
+    "/api/v1/channels",
+    "/api/v2/channels",
+    "/channels",
+    "/",
+]
+
 
 class ListenWifiClient:
     """HTTP REST client for a single discovered ListenWifi server."""
@@ -33,7 +44,6 @@ class ListenWifiClient:
         self.base_url = base_url.rstrip("/")
         self._session = requests.Session()
         self._session.headers.update({"Accept": "application/json"})
-        self._api_version: int = 2  # will fall back to 1 on first failure
 
     # ------------------------------------------------------------------
     # Public API
@@ -70,19 +80,16 @@ class ListenWifiClient:
     def stop_stream(self, channel_number: str) -> None:
         """Tell the server to stop sending RTP audio for this channel."""
         try:
-            url = self.base_url + V2_STREAM
             self._session.delete(
-                url,
+                self.base_url + V2_STREAM,
                 params={"deviceId": DEVICE_ID, "channelNum": channel_number},
                 timeout=REQUEST_TIMEOUT,
             )
         except Exception as exc:
             logger.debug("stop_stream V2 error: %s", exc)
-        # Also attempt V1 stop (best-effort)
         try:
-            url = self.base_url + V1_STREAM
             self._session.delete(
-                url,
+                self.base_url + V1_STREAM,
                 params={"channelNum": channel_number},
                 timeout=REQUEST_TIMEOUT,
             )
@@ -94,39 +101,51 @@ class ListenWifiClient:
     # ------------------------------------------------------------------
 
     def _get_v2_channels(self) -> list[dict] | None:
+        url = self.base_url + V2_CHANNELS
         try:
-            resp = self._session.get(
-                self.base_url + V2_CHANNELS,
-                timeout=REQUEST_TIMEOUT,
-            )
-            resp.raise_for_status()
+            resp = self._session.get(url, timeout=REQUEST_TIMEOUT)
+            if not resp.ok:
+                logger.warning(
+                    "V2 channels %s → HTTP %d %s | %.300s",
+                    url, resp.status_code, resp.reason, resp.text,
+                )
+                return None
             data = resp.json()
-            # Response may be a list directly or wrapped in a key
             if isinstance(data, list):
                 return [_normalize_channel(ch) for ch in data]
             if isinstance(data, dict):
                 for key in ("channels", "networkChannels", "data"):
                     if key in data and isinstance(data[key], list):
                         return [_normalize_channel(ch) for ch in data[key]]
-            logger.warning("Unexpected V2 channel response shape: %s", type(data))
+            logger.warning(
+                "V2 channels %s → unexpected shape %s | %.300s",
+                url, type(data).__name__, str(data),
+            )
             return None
         except Exception as exc:
-            logger.debug("V2 get_channels failed: %s", exc)
+            logger.warning("V2 channels %s → %s", url, exc)
             return None
 
     def _get_v1_channels(self) -> list[dict] | None:
+        url = self.base_url + V1_CHANNELS
         try:
-            resp = self._session.get(
-                self.base_url + V1_CHANNELS,
-                timeout=REQUEST_TIMEOUT,
-            )
-            resp.raise_for_status()
+            resp = self._session.get(url, timeout=REQUEST_TIMEOUT)
+            if not resp.ok:
+                logger.warning(
+                    "V1 channels %s → HTTP %d %s | %.300s",
+                    url, resp.status_code, resp.reason, resp.text,
+                )
+                return None
             data = resp.json()
             channels = data if isinstance(data, list) else data.get("channels", [])
             return [_normalize_channel(ch) for ch in channels]
         except Exception as exc:
-            logger.debug("V1 get_channels failed: %s", exc)
+            logger.warning("V1 channels %s → %s", url, exc)
             return None
+
+    # ------------------------------------------------------------------
+    # Stream request helpers
+    # ------------------------------------------------------------------
 
     def _post_v2_stream(
         self,
@@ -134,9 +153,10 @@ class ListenWifiClient:
         client_ip: str,
         client_udp_port: int,
     ) -> dict | None:
+        url = self.base_url + V2_STREAM
         try:
             resp = self._session.post(
-                self.base_url + V2_STREAM,
+                url,
                 json={
                     "deviceId": DEVICE_ID,
                     "channelNum": channel_number,
@@ -145,10 +165,15 @@ class ListenWifiClient:
                 },
                 timeout=REQUEST_TIMEOUT,
             )
-            resp.raise_for_status()
+            if not resp.ok:
+                logger.warning(
+                    "V2 stream %s → HTTP %d %s | %.300s",
+                    url, resp.status_code, resp.reason, resp.text,
+                )
+                return None
             return resp.json() if resp.content else {}
         except Exception as exc:
-            logger.debug("V2 request_stream failed: %s", exc)
+            logger.warning("V2 stream %s → %s", url, exc)
             return None
 
     def _post_v1_stream(
@@ -157,9 +182,10 @@ class ListenWifiClient:
         client_ip: str,
         client_udp_port: int,
     ) -> dict | None:
+        url = self.base_url + V1_STREAM
         try:
             resp = self._session.post(
-                self.base_url + V1_STREAM,
+                url,
                 json={
                     "channelNum": channel_number,
                     "myAppIpAddress": client_ip,
@@ -167,11 +193,49 @@ class ListenWifiClient:
                 },
                 timeout=REQUEST_TIMEOUT,
             )
-            resp.raise_for_status()
+            if not resp.ok:
+                logger.warning(
+                    "V1 stream %s → HTTP %d %s | %.300s",
+                    url, resp.status_code, resp.reason, resp.text,
+                )
+                return None
             return resp.json() if resp.content else {}
         except Exception as exc:
-            logger.debug("V1 request_stream failed: %s", exc)
+            logger.warning("V1 stream %s → %s", url, exc)
             return None
+
+
+# ------------------------------------------------------------------
+# Diagnostics
+# ------------------------------------------------------------------
+
+def probe_server(host: str, port: int = 80) -> list[dict]:
+    """
+    Hit every candidate API path on host:port and return raw results.
+    Used by the /api/probe endpoint for debugging unknown server APIs.
+    """
+    base = f"http://{host}:{port}"
+    sess = requests.Session()
+    sess.headers["Accept"] = "application/json"
+    results = []
+    for path in PROBE_PATHS:
+        url = base + path
+        try:
+            resp = sess.get(url, timeout=5, allow_redirects=True)
+            results.append({
+                "path":         path,
+                "status":       resp.status_code,
+                "reason":       resp.reason,
+                "content_type": resp.headers.get("Content-Type", ""),
+                "body":         resp.text[:1200],
+            })
+        except Exception as exc:
+            results.append({
+                "path":  path,
+                "status": None,
+                "error": str(exc),
+            })
+    return results
 
 
 # ------------------------------------------------------------------
