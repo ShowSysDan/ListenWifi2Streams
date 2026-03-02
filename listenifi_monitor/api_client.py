@@ -15,13 +15,14 @@ logger = logging.getLogger(__name__)
 # Stable device ID for the lifetime of this process
 DEVICE_ID = str(uuid.uuid4())
 
-# API path constants (from iOS SDK EAEExxtractorAPIConstants.h)
+# API path constants (from iOS SDK EAEExxtractorAPIConstants.h + observed redirects)
 V2_CHANNELS  = "/exxtractor/api/v2/networkChannels"
-V2_STREAM    = "/exxtractor/api/v2/stream"
+V2_STREAM    = "/exxtractor/api/v2/streams"   # plural — confirmed by V1 redirect
 V1_CHANNELS  = "/api/myapp/asClientChannels"
 V1_STREAM    = "/api/myapp/channels"
 
-REQUEST_TIMEOUT = 5  # seconds
+REQUEST_TIMEOUT = 5   # seconds — channel listing
+STREAM_TIMEOUT  = 3   # seconds — stream start/stop requests (should be fast)
 
 # Candidate paths tried by probe_server() for diagnostics
 PROBE_PATHS = [
@@ -78,22 +79,16 @@ class ListenWifiClient:
 
     def stop_stream(self, channel_number: str) -> None:
         """Tell the server to stop sending RTP audio for this channel."""
-        try:
-            self._session.delete(
-                self.base_url + V2_STREAM,
-                params={"deviceId": DEVICE_ID, "channelNum": channel_number},
-                timeout=REQUEST_TIMEOUT,
-            )
-        except Exception as exc:
-            logger.debug("stop_stream V2 error: %s", exc)
-        try:
-            self._session.delete(
-                self.base_url + V1_STREAM,
-                params={"channelNum": channel_number},
-                timeout=REQUEST_TIMEOUT,
-            )
-        except Exception:
-            pass
+        for url in (self.base_url + V2_STREAM, self.base_url + V1_STREAM):
+            try:
+                self._session.delete(
+                    url,
+                    params={"channelNum": channel_number},
+                    timeout=STREAM_TIMEOUT,
+                    allow_redirects=False,
+                )
+            except Exception as exc:
+                logger.debug("stop_stream %s → %s", url, exc)
 
     # ------------------------------------------------------------------
     # V2 helpers
@@ -165,28 +160,32 @@ class ListenWifiClient:
         client_ip: str,
         client_udp_port: int,
     ) -> dict | None:
+        # Body confirmed by inspecting V1 redirect: no deviceId
+        body = {
+            "channelNum":      channel_number,
+            "myAppIpAddress":  client_ip,
+            "myAppUdpPort":    client_udp_port,
+        }
         url = self.base_url + V2_STREAM
         try:
             resp = self._session.post(
-                url,
-                json={
-                    "deviceId": DEVICE_ID,
-                    "channelNum": channel_number,
-                    "myAppIpAddress": client_ip,
-                    "myAppUdpPort": client_udp_port,
-                },
-                timeout=REQUEST_TIMEOUT,
+                url, json=body,
+                timeout=STREAM_TIMEOUT,
+                allow_redirects=False,
             )
-            if not resp.ok:
-                logger.warning(
-                    "V2 stream %s → HTTP %d %s | %.300s",
-                    url, resp.status_code, resp.reason, resp.text,
-                )
-                return None
-            return resp.json() if resp.content else {}
+            if resp.ok:
+                return resp.json() if resp.content else {}
+            if resp.is_redirect:
+                location = resp.headers.get("Location", "")
+                logger.info("V2 stream redirect → %s", location)
+                return self._follow_stream_redirect(location, body)
+            logger.warning(
+                "V2 stream %s → HTTP %d %s | %.300s",
+                url, resp.status_code, resp.reason, resp.text,
+            )
         except Exception as exc:
             logger.warning("V2 stream %s → %s", url, exc)
-            return None
+        return None
 
     def _post_v1_stream(
         self,
@@ -194,27 +193,62 @@ class ListenWifiClient:
         client_ip: str,
         client_udp_port: int,
     ) -> dict | None:
+        body = {
+            "channelNum":     channel_number,
+            "myAppIpAddress": client_ip,
+            "myAppUdpPort":   client_udp_port,
+        }
         url = self.base_url + V1_STREAM
         try:
             resp = self._session.post(
-                url,
-                json={
-                    "channelNum": channel_number,
-                    "myAppIpAddress": client_ip,
-                    "myAppUdpPort": client_udp_port,
-                },
-                timeout=REQUEST_TIMEOUT,
+                url, json=body,
+                timeout=STREAM_TIMEOUT,
+                allow_redirects=False,  # server redirects to port 8000 which may be unreachable
             )
-            if not resp.ok:
-                logger.warning(
-                    "V1 stream %s → HTTP %d %s | %.300s",
-                    url, resp.status_code, resp.reason, resp.text,
-                )
-                return None
-            return resp.json() if resp.content else {}
+            if resp.ok:
+                return resp.json() if resp.content else {}
+            if resp.is_redirect:
+                location = resp.headers.get("Location", "")
+                logger.info("V1 stream redirect → %s", location)
+                return self._follow_stream_redirect(location, body)
+            logger.warning(
+                "V1 stream %s → HTTP %d %s | %.300s",
+                url, resp.status_code, resp.reason, resp.text,
+            )
         except Exception as exc:
             logger.warning("V1 stream %s → %s", url, exc)
+        return None
+
+    def _follow_stream_redirect(self, location: str, body: dict) -> dict | None:
+        """
+        Attempt to follow a stream redirect to an alternate port/path.
+        Tries POST first, then GET with params (servers sometimes use a
+        dummyMethod=POST+dummyBody query-string pattern).
+        """
+        if not location:
             return None
+        for attempt in ("post", "get"):
+            try:
+                if attempt == "post":
+                    resp = self._session.post(
+                        location, json=body,
+                        timeout=STREAM_TIMEOUT, allow_redirects=False,
+                    )
+                else:
+                    resp = self._session.get(
+                        location, params=body,
+                        timeout=STREAM_TIMEOUT, allow_redirects=False,
+                    )
+                if resp.ok:
+                    logger.info("Stream redirect %s succeeded (%s)", location, attempt.upper())
+                    return resp.json() if resp.content else {}
+                logger.warning(
+                    "Stream redirect %s [%s] → HTTP %d %s | %.200s",
+                    location, attempt.upper(), resp.status_code, resp.reason, resp.text,
+                )
+            except Exception as exc:
+                logger.warning("Stream redirect %s [%s] → %s", location, attempt.upper(), exc)
+        return None
 
 
 # ------------------------------------------------------------------
