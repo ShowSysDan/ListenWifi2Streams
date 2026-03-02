@@ -53,8 +53,7 @@ class ListenWifiClient:
         """
         Fetch the list of available audio channels from the server.
 
-        Returns a list of dicts with at minimum:
-            number, title, subtitle, ipAddress, port, isPA, isPrivate, gain
+        Returns a list of normalised channel dicts.
         """
         channels = self._get_v2_channels()
         if channels is None:
@@ -111,10 +110,12 @@ class ListenWifiClient:
                 )
                 return None
             data = resp.json()
+            # Response is a JSON array directly
             if isinstance(data, list):
                 return [_normalize_channel(ch) for ch in data]
+            # Or wrapped in a key
             if isinstance(data, dict):
-                for key in ("channels", "networkChannels", "data"):
+                for key in ("channels", "networkChannels", "channelInfo", "data"):
                     if key in data and isinstance(data[key], list):
                         return [_normalize_channel(ch) for ch in data[key]]
             logger.warning(
@@ -137,8 +138,19 @@ class ListenWifiClient:
                 )
                 return None
             data = resp.json()
-            channels = data if isinstance(data, list) else data.get("channels", [])
-            return [_normalize_channel(ch) for ch in channels]
+            # V1 wraps in {"channelInfo": [...]} or similar
+            if isinstance(data, dict):
+                for key in ("channelInfo", "channels", "networkChannels", "data"):
+                    if key in data and isinstance(data[key], list):
+                        return [_normalize_channel(ch) for ch in data[key]]
+                logger.warning(
+                    "V1 channels %s → unexpected dict shape, keys: %s",
+                    url, list(data.keys()),
+                )
+                return None
+            if isinstance(data, list):
+                return [_normalize_channel(ch) for ch in data]
+            return None
         except Exception as exc:
             logger.warning("V1 channels %s → %s", url, exc)
             return None
@@ -246,21 +258,53 @@ def _normalize_channel(raw: dict) -> dict:
     """
     Normalise a raw channel dict from either API version into a consistent schema.
 
-    JSON field names come from API_V2_AudioChannelMapping.plist:
-        number → exxtractorUniqueIdentifier
-        title, subtitle, description, ipAddress, port,
-        isPA, isPrivate, gain, tag, apiVersion, passphrase
+    V2 field names (networkChannels endpoint):
+        number, title, port (hardware path string), isPA, isPrivate,
+        isAvailable, ipAddress, backgroundColor, apiVersion
+
+    V1 field names (asClientChannels endpoint, wrapped in "channelInfo"):
+        channelNum, channelLabel, gain, delay, backgroundColor, id,
+        apiVersion, codecParams, rmsVoltage, port (hardware path string),
+        enable, ipAddress, isPrivate, isPAChannel, currentSessions
     """
+    # Channel number — V2: "number", V1: "channelNum" / "id"
+    number = (
+        raw.get("number")
+        or raw.get("channelNum")
+        or raw.get("exxtractorUniqueIdentifier")
+        or raw.get("id")
+        or ""
+    )
+
+    # Title — V2: "title", V1: "channelLabel"
+    title = raw.get("title") or raw.get("channelLabel") or raw.get("name") or "Channel"
+
+    # Available — V2: "isAvailable", V1: "enable"
+    available = raw.get("isAvailable")
+    if available is None:
+        available = raw.get("enable", True)
+
+    # PA channel — V2: "isPA", V1: "isPAChannel"
+    is_pa = bool(raw.get("isPA") or raw.get("isPAChannel") or raw.get("isPa") or False)
+
+    # port in the channel listing is a hardware device path, NOT a UDP port
+    hw_port = str(raw.get("port") or "")
+
     return {
-        "number":      str(raw.get("number") or raw.get("exxtractorUniqueIdentifier") or ""),
-        "title":       raw.get("title") or raw.get("name") or "Channel",
-        "subtitle":    raw.get("subtitle") or "",
-        "description": raw.get("description") or "",
-        "tag":         raw.get("tag") or "",
-        "ipAddress":   raw.get("ipAddress") or "",
-        "port":        int(raw.get("port") or 0),
-        "isPA":        bool(raw.get("isPA") or raw.get("isPa") or False),
-        "isPrivate":   bool(raw.get("isPrivate") or False),
-        "gain":        float(raw.get("gain") or 0.0),
-        "apiVersion":  raw.get("apiVersion") or "v2",
+        "number":          str(number),
+        "title":           title,
+        "subtitle":        raw.get("subtitle") or "",
+        "description":     raw.get("description") or "",
+        "tag":             raw.get("tag") or "",
+        "ipAddress":       raw.get("ipAddress") or "",
+        "hw_port":         hw_port,             # hardware device path, e.g. "platform-xhci-hcd…"
+        "isPA":            is_pa,
+        "isPrivate":       bool(raw.get("isPrivate") or False),
+        "isAvailable":     bool(available),
+        "gain":            float(raw.get("gain") or 0.0),
+        "apiVersion":      raw.get("apiVersion") or "v2",
+        "codecParams":     raw.get("codecParams") or "",
+        "rmsVoltage":      int(raw.get("rmsVoltage") or 0),
+        "currentSessions": int(raw.get("currentSessions") or 0),
+        "backgroundColor": str(raw.get("backgroundColor") or ""),
     }
