@@ -1,0 +1,5 @@
+flask>=3.0
+flask-socketio>=5.3
+zeroconf>=0.132
+requests>=2.31
+opuslib>=3.0.1

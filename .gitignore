@@ -1,0 +1,17 @@
+# SDK reference folders — kept locally for protocol reference only.
+# Not needed to run the Python app. Download from Listen Technologies if required.
+WiFi-Audio-SDK-for-iOS-v7.1.0-1/
+WiFi Audio SDK for Android v5.1.0/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
