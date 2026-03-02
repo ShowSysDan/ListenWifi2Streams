@@ -5,12 +5,12 @@ relays each channel as an HTTP MP3 stream, and provides a live web dashboard.
 
 | Port | What it serves |
 |------|----------------|
-| 6000 | Web dashboard |
-| 6001 | Server 1 (lowest IP) — Channel 1 |
-| 6002 | Server 1 — Channel 2 |
-| 6003 | Server 2 (2nd lowest IP) — Channel 1 |
+| 7000 | Web dashboard |
+| 7001 | Server 1 (lowest IP) — Channel 1 |
+| 7002 | Server 1 — Channel 2 |
+| 7003 | Server 2 (2nd lowest IP) — Channel 1 |
 | … | … |
-| 6012 | Server 6 (highest IP) — Channel 2 |
+| 7012 | Server 6 (highest IP) — Channel 2 |
 
 Stream ports are assigned by ascending server IP then ascending channel number
 and recomputed automatically if the server list changes.
@@ -90,7 +90,8 @@ pip install -r requirements.txt
 
 ### Step 5 — Install the Opus audio codec (opus.dll)
 
-`opuslib` is a Python wrapper — it needs the native `opus.dll` alongside the script.
+`opuslib` is a Python wrapper — it needs the native `opus.dll` placed in the
+same folder as `app.py`.  The app will find it there automatically.
 
 **Download a pre-built DLL:**
 
@@ -105,6 +106,9 @@ Confirm Python can find it:
 .\venv\Scripts\python -c "import opuslib; print('Opus OK')"
 ```
 
+> **Note:** The app explicitly pre-loads the DLL from the script directory, so
+> you do **not** need to add it to `PATH` or `System32`.
+
 ---
 
 ### Step 6 — Open Windows Firewall ports
@@ -115,7 +119,7 @@ Run as Administrator:
 # Dashboard and MP3 stream ports (allow other machines to connect via VLC)
 netsh advfirewall firewall add rule `
   name="ListenWifi Monitor - HTTP" `
-  dir=in action=allow protocol=TCP localport=6000-6012
+  dir=in action=allow protocol=TCP localport=7000-7012
 
 # RTP inbound — lets the ListenWifi servers send audio back to this machine
 netsh advfirewall firewall add rule `
@@ -125,7 +129,38 @@ netsh advfirewall firewall add rule `
 
 ---
 
-### Step 7 — Test manually (recommended before installing the service)
+### Step 7 — Configure the app (optional)
+
+Open `app.py` in any text editor and adjust the settings near the top:
+
+```python
+# ── Ports ──────────────────────────────────────────────────────────────────
+WEB_PORT    = 7000   # dashboard
+STREAM_BASE = 7001   # first channel stream port
+
+# ── Static / hard-coded servers ────────────────────────────────────────────
+# If mDNS doesn't find your servers automatically, list their IPs here.
+# Format: "host" (port defaults to 80) or "host:port"
+STATIC_SERVERS: list[str] = [
+    "192.168.1.50",
+    "192.168.1.51",
+    "192.168.1.52",
+]
+
+# ── Remote syslog ──────────────────────────────────────────────────────────
+# Forward all log messages to a syslog server (Graylog, NAS, Papertrail, etc.)
+# Leave SYSLOG_HOST = "" to disable.
+SYSLOG_HOST: str = "192.168.1.10"   # your syslog server IP or hostname
+SYSLOG_PORT: int = 514
+SYSLOG_TCP:  bool = False            # True = TCP, False = UDP
+```
+
+`STATIC_SERVERS` and mDNS discovery work side-by-side — add your IPs there if
+the servers don't show up automatically within a minute or two.
+
+---
+
+### Step 8 — Test manually (recommended before installing the service)
 
 ```powershell
 cd C:\ListenWifi2Streams\listenifi_monitor
@@ -133,12 +168,12 @@ cd C:\ListenWifi2Streams\listenifi_monitor
 python app.py
 ```
 
-Open **http://localhost:6000** — the dashboard should load and begin scanning.
+Open **http://localhost:7000** — the dashboard should load and begin scanning.
 Press `Ctrl+C` to stop when satisfied.
 
 ---
 
-### Step 8 — Install NSSM (service manager)
+### Step 9 — Install NSSM (service manager)
 
 NSSM wraps any executable as a Windows service with automatic restart on failure.
 
@@ -148,7 +183,7 @@ NSSM wraps any executable as a Windows service with automatic restart on failure
 
 ---
 
-### Step 9 — Create the Windows service
+### Step 10 — Create the Windows service
 
 Run PowerShell as **Administrator**. Adjust the path if you cloned somewhere else.
 
@@ -189,7 +224,7 @@ Confirm it is running:
 nssm status ListenWifiMonitor   # Expected: SERVICE_RUNNING
 ```
 
-Open **http://localhost:6000** — the dashboard should be live with no user session required.
+Open **http://localhost:7000** — the dashboard should be live with no user session required.
 
 ---
 
@@ -215,7 +250,7 @@ The service starts at boot and restarts within 5 seconds after any crash.
 Once the dashboard shows a channel as **Receiving RTP**:
 
 1. Open VLC → **Media → Open Network Stream**
-2. Enter the URL shown on the channel card, e.g. `http://192.168.1.100:6001/`
+2. Enter the URL shown on the channel card, e.g. `http://192.168.1.100:7001/`
 3. VLC's "Now Playing" displays the channel title automatically
 
 Multiple VLC instances can connect to the same port simultaneously.
@@ -225,10 +260,11 @@ Multiple VLC instances can connect to the same port simultaneously.
 ## Troubleshooting
 
 **Dashboard loads but no servers appear**
-- Confirm the ListenWifi units and this PC are on the same subnet / VLAN.
-- mDNS (UDP 5353) must not be blocked between them. Try temporarily disabling
-  Windows Firewall to test: `netsh advfirewall set allprofiles state off`
-  (re-enable after: `netsh advfirewall set allprofiles state on`)
+- If mDNS isn't working, add the server IPs to `STATIC_SERVERS` in `app.py`
+  (see Step 7) and restart — they'll be probed directly over HTTP.
+- mDNS (UDP 5353) must not be blocked between devices. Try temporarily disabling
+  Windows Firewall: `netsh advfirewall set allprofiles state off`
+  (re-enable: `netsh advfirewall set allprofiles state on`)
 
 **Channel stays "Requesting…" and never turns green**
 - The firewall rule for UDP 49152–65535 inbound (Step 6) may be missing.
@@ -238,17 +274,18 @@ Multiple VLC instances can connect to the same port simultaneously.
 - Run `ffmpeg -version` in a *new* terminal. If missing, reinstall via winget.
 - The service runs as SYSTEM and may have a different PATH. Hardcode the path
   in `stream_server.py`: change `shutil.which("ffmpeg")` to return the full
-  path, e.g. `C:\ProgramData\chocolatey\bin\ffmpeg.exe`.
+  path, e.g. `C:\Program Files\ffmpeg-full_build\bin\ffmpeg.exe`.
 
 **`opuslib` ImportError or OSError**
 - Confirm `opus.dll` is in `C:\ListenWifi2Streams\listenifi_monitor\`.
 - Confirm it is the **x64** build (matches 64-bit Python).
+- Run the test: `.\venv\Scripts\python -c "import opuslib; print('OK')"`
 
 **Service fails to start / exits immediately**
 - Check: `notepad C:\ListenWifi2Streams\listenifi_monitor\logs\service.log`
 - Ensure the SYSTEM account has Read & Execute on the project folder:
   `icacls C:\ListenWifi2Streams /grant "NT AUTHORITY\SYSTEM:(OI)(CI)RX" /T`
 
-**Port 6000 already in use**
-- Find the process: `netstat -ano | findstr :6000`
+**Port 7000 already in use**
+- Find the process: `netstat -ano | findstr :7000`
 - Kill it or change `WEB_PORT` in `app.py` and recreate the service.

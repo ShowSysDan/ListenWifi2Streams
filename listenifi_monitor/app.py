@@ -1,31 +1,32 @@
 """
 app.py — ListenWifi Audio Stream Monitor
-Flask web dashboard (port 6000) + per-channel MP3 relay (ports 6001+).
+Flask web dashboard (port 7000) + per-channel MP3 relay (ports 7001+).
 
 Port assignment (IP-sorted):
   Channels are sorted by (server_ip_ascending, channel_number_ascending) and
-  assigned ports 6001, 6002, … in that order.
+  assigned ports 7001, 7002, … in that order.
 
   Example — 6 servers × 2 channels each:
-    192.168.1.10  ch.1 → 6001
-    192.168.1.10  ch.2 → 6002
-    192.168.1.20  ch.1 → 6003
-    192.168.1.20  ch.2 → 6004
+    192.168.1.10  ch.1 → 7001
+    192.168.1.10  ch.2 → 7002
+    192.168.1.20  ch.1 → 7003
+    192.168.1.20  ch.2 → 7004
     ...
-    192.168.1.60  ch.2 → 6012
+    192.168.1.60  ch.2 → 7012
 
   If a new server is discovered that sorts lower than existing servers, all
   ports are recomputed and the affected stream servers are restarted.
 
 Usage:
     python app.py
-    open http://localhost:6000
+    open http://localhost:7000
 
 VLC:
     vlc http://<your-ip>:<channel-port>/
 """
 
 import logging
+import logging.handlers
 import socket
 import threading
 import time
@@ -48,6 +49,36 @@ logging.basicConfig(
 logger = logging.getLogger("app")
 
 # ---------------------------------------------------------------------------
+# Remote syslog
+# ---------------------------------------------------------------------------
+# Set SYSLOG_HOST to an IP or hostname to forward all log messages to a remote
+# syslog server (e.g. a NAS, Graylog, or Papertrail).  Uses UDP by default;
+# set SYSLOG_TCP = True to use TCP instead.
+# Leave SYSLOG_HOST as an empty string to disable.
+SYSLOG_HOST: str = ""
+SYSLOG_PORT: int = 514
+SYSLOG_TCP:  bool = False
+
+def _setup_syslog() -> None:
+    if not SYSLOG_HOST:
+        return
+    socktype = socket.SOCK_STREAM if SYSLOG_TCP else socket.SOCK_DGRAM
+    handler = logging.handlers.SysLogHandler(
+        address=(SYSLOG_HOST, SYSLOG_PORT),
+        socktype=socktype,
+    )
+    handler.setFormatter(logging.Formatter(
+        "listenifi: %(levelname)s %(name)s: %(message)s"
+    ))
+    logging.getLogger().addHandler(handler)
+    logger.info(
+        "Syslog forwarding enabled → %s:%d (%s)",
+        SYSLOG_HOST, SYSLOG_PORT, "TCP" if SYSLOG_TCP else "UDP",
+    )
+
+_setup_syslog()
+
+# ---------------------------------------------------------------------------
 # Flask + SocketIO
 # ---------------------------------------------------------------------------
 app = Flask(__name__)
@@ -57,8 +88,18 @@ socketio = SocketIO(app, async_mode="threading", cors_allowed_origins="*")
 # ---------------------------------------------------------------------------
 # Ports
 # ---------------------------------------------------------------------------
-WEB_PORT    = 6000
-STREAM_BASE = 6001
+WEB_PORT    = 7000
+STREAM_BASE = 7001
+
+# ---------------------------------------------------------------------------
+# Static / hard-coded servers
+# ---------------------------------------------------------------------------
+# If mDNS doesn't find your servers automatically, list their IPs here.
+# Each entry is "host" (port defaults to 80) or "host:port".
+# These are probed at startup in addition to — not instead of — mDNS.
+# Example:
+#   STATIC_SERVERS = ["192.168.1.50", "192.168.1.51", "192.168.1.52:8080"]
+STATIC_SERVERS: list[str] = []
 
 # ---------------------------------------------------------------------------
 # Global state  (all mutations must hold _state_lock)
@@ -121,7 +162,7 @@ def _server_channels_sorted_locked(server_name: str) -> list[dict]:
 
 def _recompute_all_ports_locked() -> None:
     """
-    Assign stream ports 6001, 6002, … ordered by (server_ip_asc, channel_num_asc).
+    Assign stream ports 7001, 7002, … ordered by (server_ip_asc, channel_num_asc).
 
     Updates _channels[*]["stream_port"] and ["stream_url"] in-place.
     Must be called with _state_lock held.
@@ -449,6 +490,46 @@ def handle_refresh(_data=None):
 
 
 # ---------------------------------------------------------------------------
+# Static server probing
+# ---------------------------------------------------------------------------
+
+def _probe_static_servers() -> None:
+    """
+    Inject manually configured servers from STATIC_SERVERS as if they were
+    discovered via mDNS.  Each entry is probed in its own daemon thread so
+    a slow or unreachable host doesn't block the others.
+    """
+    for entry in STATIC_SERVERS:
+        entry = entry.strip()
+        if not entry:
+            continue
+        if ":" in entry:
+            host, port_str = entry.rsplit(":", 1)
+            try:
+                port = int(port_str)
+            except ValueError:
+                logger.warning("STATIC_SERVERS: invalid entry %r (bad port)", entry)
+                continue
+        else:
+            host, port = entry, 80
+
+        server_info = {
+            "name":          f"static-{host}",
+            "host":          host,
+            "port":          port,
+            "base_url":      f"http://{host}:{port}",
+            "friendly_name": host,
+        }
+        logger.info("Static server: queuing probe for %s:%d", host, port)
+        threading.Thread(
+            target=_on_server_added,
+            args=(server_info,),
+            name=f"static-probe-{host}",
+            daemon=True,
+        ).start()
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -465,11 +546,18 @@ if __name__ == "__main__":
         daemon=True,
     ).start()
 
+    if STATIC_SERVERS:
+        _probe_static_servers()
+
     logger.info("=" * 60)
     logger.info("ListenWifi Monitor starting")
     logger.info("  Dashboard:    http://localhost:%d", WEB_PORT)
     logger.info("  Port order:   lowest server IP → port %d, ascending", STREAM_BASE)
     logger.info("  Scanning for _exxothermic._tcp.local. …")
+    if STATIC_SERVERS:
+        logger.info("  Static servers: %s", ", ".join(STATIC_SERVERS))
+    if SYSLOG_HOST:
+        logger.info("  Syslog:         %s:%d (%s)", SYSLOG_HOST, SYSLOG_PORT, "TCP" if SYSLOG_TCP else "UDP")
     logger.info("=" * 60)
 
     try:
