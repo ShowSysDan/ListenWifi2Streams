@@ -597,7 +597,7 @@ socket.on("state_update", (data) => {
 });
 
 socket.on("channel_action_result", (data) => {
-  if (!data.ok && data.error) {
+  if (data.ok === false && data.error) {
     toast("Error: " + data.error, "error");
   }
 });
@@ -663,7 +663,7 @@ function renderChannels() {
     const unavail  = ch.isAvailable === false;
 
     return `
-    <div class="ch-card ${statusClass}" id="ch-${esc(ch.number)}">
+    <div class="ch-card ${statusClass}" id="ch-${esc(ch.uid)}">
       <div class="ch-header">
         <div class="ch-num" ${numStyle}>${esc(ch.number)}</div>
         <div class="ch-meta">
@@ -696,11 +696,11 @@ function renderChannels() {
       </div>
 
       <div class="ch-controls">
-        <button class="btn btn-start" onclick="startChannel('${esc(ch.number)}')"
+        <button class="btn btn-start" onclick="startChannel('${esc(ch.uid)}')"
           ${isActive || unavail ? "disabled" : ""}>
           ▶ Start
         </button>
-        <button class="btn btn-stop"  onclick="stopChannel('${esc(ch.number)}')"
+        <button class="btn btn-stop"  onclick="stopChannel('${esc(ch.uid)}')"
           ${!isActive ? "disabled" : ""}>
           ■ Stop
         </button>
@@ -710,14 +710,14 @@ function renderChannels() {
 }
 
 // ── Actions ───────────────────────────────────────────────────────────────
-function startChannel(num) {
-  socket.emit("start_channel", { channel_number: num });
-  toast(`Starting channel ${num}…`);
+function startChannel(uid) {
+  socket.emit("start_channel", { uid: uid });
+  toast("Starting channel…");
 }
 
-function stopChannel(num) {
-  socket.emit("stop_channel", { channel_number: num });
-  toast(`Stopping channel ${num}…`);
+function stopChannel(uid) {
+  socket.emit("stop_channel", { uid: uid });
+  toast("Stopping channel…");
 }
 
 function copyUrl(url, btn) {

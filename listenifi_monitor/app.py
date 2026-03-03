@@ -147,16 +147,16 @@ _state_lock = threading.Lock()
 # mDNS name → {"name", "host", "port", "base_url", "friendly_name"}
 _servers: dict[str, dict] = {}
 
-# channel_number (str) → channel info dict (extended with our fields)
+# uid (f"{server_host}:{channel_number}") → channel info dict (extended with our fields)
 _channels: dict[str, dict] = {}
 
-# channel_number → ChannelStreamServer
+# uid → ChannelStreamServer
 _stream_servers: dict[str, ChannelStreamServer] = {}
 
-# channel_number → RTPStreamReceiver
+# uid → RTPStreamReceiver
 _rtp_receivers: dict[str, RTPStreamReceiver] = {}
 
-# channel_number → ListenWifiClient (the client for that channel's server)
+# uid → ListenWifiClient (the client for that channel's server)
 _api_clients: dict[str, ListenWifiClient] = {}
 
 
@@ -225,9 +225,9 @@ def _build_state() -> dict:
         channels_list = []
         for srv in srvs:
             for ch in _server_channels_sorted_locked(srv["name"]):
-                num  = ch["number"]
-                recv = _rtp_receivers.get(num)
-                ss   = _stream_servers.get(num)
+                uid  = ch["uid"]
+                recv = _rtp_receivers.get(uid)
+                ss   = _stream_servers.get(uid)
                 status = "idle"
                 if recv and recv.is_running:
                     status = "active" if recv.packets_received > 0 else "requesting"
@@ -278,15 +278,16 @@ def _on_server_added(server_info: dict) -> None:
         _servers[name] = server_info
 
         for ch in channels:
-            num = ch["number"]
-            if num not in _channels:
-                _channels[num] = {
+            uid = f"{server_info['host']}:{ch['number']}"
+            if uid not in _channels:
+                _channels[uid] = {
                     **ch,
+                    "uid":         uid,
                     "server_name": name,
                     "stream_port": 0,
                     "stream_url":  "",
                 }
-                _api_clients[num] = client
+                _api_clients[uid] = client
 
         # Recompute port assignments for ALL channels (may shift existing servers)
         _recompute_all_ports_locked()
@@ -355,7 +356,7 @@ def _on_server_removed(name: str) -> None:
 # Stream control
 # ---------------------------------------------------------------------------
 
-def _start_channel(channel_number: str) -> dict:
+def _start_channel(uid: str) -> dict:
     """
     Start streaming a channel:
       1. Bind a free UDP port.
@@ -363,16 +364,16 @@ def _start_channel(channel_number: str) -> dict:
       3. RTPStreamReceiver feeds PCM into ChannelStreamServer → MP3 → VLC.
     """
     with _state_lock:
-        ch     = _channels.get(channel_number)
-        client = _api_clients.get(channel_number)
-        srv    = _stream_servers.get(channel_number)
+        ch     = _channels.get(uid)
+        client = _api_clients.get(uid)
+        srv    = _stream_servers.get(uid)
 
     if not ch or not client or not srv:
         return {"ok": False, "error": "Unknown channel"}
 
     # Stop any existing receiver for this channel
     with _state_lock:
-        old = _rtp_receivers.pop(channel_number, None)
+        old = _rtp_receivers.pop(uid, None)
     if old:
         old.stop()
 
@@ -383,9 +384,10 @@ def _start_channel(channel_number: str) -> dict:
     udp_sock.close()  # RTPStreamReceiver will re-bind the same port number
 
     local_ip = get_local_ip()
+    channel_number = ch["number"]   # raw API channel number (e.g. "1", "2")
     logger.info(
-        "Requesting stream for channel %s → UDP %s:%d",
-        channel_number, local_ip, udp_port,
+        "Requesting stream for channel %s [%s] → UDP %s:%d",
+        uid, channel_number, local_ip, udp_port,
     )
 
     response = client.request_stream(channel_number, local_ip, udp_port)
@@ -400,29 +402,25 @@ def _start_channel(channel_number: str) -> dict:
         except (ValueError, TypeError):
             pass
 
-    # Last-resort fallback: use the port embedded in the channel listing
-    if not response and ch.get("port"):
-        udp_port = ch["port"]
-        logger.info("Falling back to channel listing port: %d", udp_port)
-
     receiver = RTPStreamReceiver(udp_port=udp_port, on_pcm=srv.feed_pcm)
     receiver.start()
 
     with _state_lock:
-        _rtp_receivers[channel_number] = receiver
+        _rtp_receivers[uid] = receiver
 
     return {"ok": True, "udp_port": udp_port}
 
 
-def _stop_channel(channel_number: str) -> None:
+def _stop_channel(uid: str) -> None:
     with _state_lock:
-        recv   = _rtp_receivers.pop(channel_number, None)
-        client = _api_clients.get(channel_number)
+        recv   = _rtp_receivers.pop(uid, None)
+        client = _api_clients.get(uid)
+        ch     = _channels.get(uid)
     if recv:
         recv.stop()
-    if client:
+    if client and ch:
         try:
-            client.stop_stream(channel_number)
+            client.stop_stream(ch["number"])
         except Exception:
             pass
 
@@ -450,24 +448,25 @@ def _poll_channels_loop() -> None:
 
             with _state_lock:
                 for ch in channels:
-                    num = ch["number"]
-                    if num not in _channels:
-                        _channels[num] = {
+                    uid = f"{srv_info['host']}:{ch['number']}"
+                    if uid not in _channels:
+                        _channels[uid] = {
                             **ch,
+                            "uid":         uid,
                             "server_name": name,
                             "stream_port": 0,
                             "stream_url":  "",
                         }
-                        _api_clients[num] = client
+                        _api_clients[uid] = client
                         changed = True
 
                 if changed:
                     _recompute_all_ports_locked()
-                    for num, ch in _channels.items():
+                    for uid, ch in _channels.items():
                         new_port = ch["stream_port"]
-                        if _stream_servers.get(num) is None:
-                            srv = ChannelStreamServer(new_port, num, ch["title"])
-                            _stream_servers[num] = srv
+                        if _stream_servers.get(uid) is None:
+                            srv = ChannelStreamServer(new_port, uid, ch["title"])
+                            _stream_servers[uid] = srv
                             to_start.append(srv)
 
             for srv in to_start:
@@ -559,20 +558,20 @@ def handle_connect():
 
 @socketio.on("start_channel")
 def handle_start_channel(data):
-    channel_number = data.get("channel_number", "")
-    logger.info("SocketIO: start_channel %s", channel_number)
-    result = _start_channel(channel_number)
+    uid = data.get("uid", "")
+    logger.info("SocketIO: start_channel %s", uid)
+    result = _start_channel(uid)
     _emit_state()
-    emit("channel_action_result", {**result, "channel_number": channel_number})
+    emit("channel_action_result", {**result, "uid": uid})
 
 
 @socketio.on("stop_channel")
 def handle_stop_channel(data):
-    channel_number = data.get("channel_number", "")
-    logger.info("SocketIO: stop_channel %s", channel_number)
-    _stop_channel(channel_number)
+    uid = data.get("uid", "")
+    logger.info("SocketIO: stop_channel %s", uid)
+    _stop_channel(uid)
     _emit_state()
-    emit("channel_action_result", {"ok": True, "channel_number": channel_number})
+    emit("channel_action_result", {"ok": True, "uid": uid})
 
 
 @socketio.on("refresh")
