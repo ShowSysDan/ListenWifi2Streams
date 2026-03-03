@@ -383,11 +383,12 @@ def _start_channel(uid: str) -> dict:
     udp_port = udp_sock.getsockname()[1]
     udp_sock.close()  # RTPStreamReceiver will re-bind the same port number
 
-    local_ip = get_local_ip()
+    server_host = uid.split(":")[0]   # e.g. "172.16.0.5"
+    local_ip = get_local_ip(server_host)  # IP on the interface that routes to this server
     channel_number = ch["number"]   # raw API channel number (e.g. "1", "2")
     logger.info(
-        "Requesting stream for channel %s [%s] → UDP %s:%d",
-        uid, channel_number, local_ip, udp_port,
+        "Requesting stream for channel %s [%s] → UDP %s:%d (local iface for %s)",
+        uid, channel_number, local_ip, udp_port, server_host,
     )
 
     response = client.request_stream(channel_number, local_ip, udp_port)

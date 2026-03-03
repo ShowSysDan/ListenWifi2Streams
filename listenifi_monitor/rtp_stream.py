@@ -61,11 +61,18 @@ except Exception:
     )
 
 
-def get_local_ip() -> str:
-    """Return this machine's LAN IP address."""
+def get_local_ip(target: str = "8.8.8.8") -> str:
+    """
+    Return this machine's IP on the interface used to reach *target*.
+
+    Pass the ListenWifi server's IP so that on multi-homed machines the
+    correct interface address is returned — e.g. the 172.16.x.x address
+    rather than the default-route address — ensuring RTP packets are
+    delivered to an interface the server can actually reach.
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        s.connect(("8.8.8.8", 80))
+        s.connect((target, 80))
         return s.getsockname()[0]
     except Exception:
         return "127.0.0.1"
