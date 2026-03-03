@@ -6,6 +6,7 @@ No authentication is attempted (public/open channels).
 """
 
 import logging
+import re
 import uuid
 
 import requests
@@ -45,6 +46,15 @@ def _safe_json(resp) -> dict:
         return resp.json()
     except ValueError:
         return {}
+
+
+def _extract_html_redirect_url(text: str) -> str:
+    """
+    Extract the first href from an HTML 'moved to <a href="...">'-style body.
+    Returns the URL string, or "" if not found.
+    """
+    m = re.search(r'href=["\']([^"\']+)["\']', text, re.IGNORECASE)
+    return m.group(1) if m else ""
 
 
 class ListenWifiClient:
@@ -220,8 +230,16 @@ class ListenWifiClient:
             )
             if resp.ok:
                 result = _safe_json(resp)
-                logger.info("V1 stream OK (body=%r)", resp.text[:80] if resp.content else "(empty)")
-                return result
+                if result:
+                    logger.info("V1 stream JSON OK")
+                    return result
+                # Non-JSON 200: check for "moved to <a href=...>" HTML redirect body
+                redirect_url = _extract_html_redirect_url(resp.text)
+                if redirect_url:
+                    logger.info("V1 stream HTML body redirect → %s", redirect_url)
+                    return self._follow_stream_redirect(redirect_url, body)
+                logger.info("V1 stream OK (empty/non-JSON body — server may already be streaming)")
+                return {}
             if resp.is_redirect:
                 location = resp.headers.get("Location", "")
                 logger.info("V1 stream redirect → %s", location)
@@ -237,14 +255,26 @@ class ListenWifiClient:
     def _follow_stream_redirect(self, location: str, body: dict) -> dict | None:
         """
         Attempt to follow a stream redirect to an alternate port/path.
-        Tries POST first, then GET with params (servers sometimes use a
-        dummyMethod=POST+dummyBody query-string pattern).
+
+        Tries three strategies in order:
+          1. GET the URL as-is (it may already carry query params from the origin server)
+          2. POST with our body as JSON
+          3. GET with our body as query params
         """
         if not location:
             return None
-        for attempt in ("post", "get"):
+        attempts = [
+            ("GET",  None),    # URL may already contain stream params
+            ("POST", "json"),
+            ("GET",  "params"),
+        ]
+        for method, body_style in attempts:
             try:
-                if attempt == "post":
+                if method == "GET" and body_style is None:
+                    resp = self._session.get(
+                        location, timeout=STREAM_TIMEOUT, allow_redirects=False,
+                    )
+                elif method == "POST":
                     resp = self._session.post(
                         location, json=body,
                         timeout=STREAM_TIMEOUT, allow_redirects=False,
@@ -255,14 +285,15 @@ class ListenWifiClient:
                         timeout=STREAM_TIMEOUT, allow_redirects=False,
                     )
                 if resp.ok:
-                    logger.info("Stream redirect %s succeeded (%s)", location, attempt.upper())
-                    return _safe_json(resp)
+                    label = f"{method} as-is" if body_style is None else f"{method}+{body_style}"
+                    logger.info("Stream redirect %s succeeded (%s)", location, label)
+                    return _safe_json(resp) or {}
                 logger.warning(
                     "Stream redirect %s [%s] → HTTP %d %s | %.200s",
-                    location, attempt.upper(), resp.status_code, resp.reason, resp.text,
+                    location, method, resp.status_code, resp.reason, resp.text,
                 )
             except Exception as exc:
-                logger.warning("Stream redirect %s [%s] → %s", location, attempt.upper(), exc)
+                logger.warning("Stream redirect %s [%s] → %s", location, method, exc)
         return None
 
 
