@@ -22,8 +22,9 @@ V2_STREAM    = "/exxtractor/api/v2/streams"   # plural — confirmed by V1 redir
 V1_CHANNELS  = "/api/myapp/asClientChannels"
 V1_STREAM    = "/api/myapp/channels"
 
-REQUEST_TIMEOUT = 5   # seconds — channel listing
-STREAM_TIMEOUT  = 3   # seconds — stream start/stop requests (should be fast)
+REQUEST_TIMEOUT   = 5   # seconds — channel listing
+STREAM_TIMEOUT    = 3   # seconds — stream start/stop (port 80, should be fast)
+REDIRECT_TIMEOUT  = 1   # seconds — redirect-follow attempts (port 8000); fail fast
 
 # Candidate paths tried by probe_server() for diagnostics
 PROBE_PATHS = [
@@ -189,12 +190,14 @@ class ListenWifiClient:
             ("GET",  {"channelNum": ch_int,        "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
             ("GET",  {"channelNum": channel_number, "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
         ]
+        last_status = None
         for method, body in attempts:
             try:
                 if method == "POST":
                     resp = self._session.post(url, json=body, timeout=STREAM_TIMEOUT, allow_redirects=False)
                 else:
                     resp = self._session.get(url, params=body, timeout=STREAM_TIMEOUT, allow_redirects=False)
+                last_status = resp.status_code
                 if resp.ok:
                     logger.info("V2 stream OK (%s channelNum=%s)", method, body["channelNum"])
                     return _safe_json(resp)
@@ -202,12 +205,11 @@ class ListenWifiClient:
                     location = resp.headers.get("Location", "")
                     logger.info("V2 stream redirect → %s", location)
                     return self._follow_stream_redirect(location, body)
-                logger.debug("V2 stream %s [%s channelNum=%s] → HTTP %d",
-                             url, method, body["channelNum"], resp.status_code)
+                logger.debug("V2 stream %s [%s channelNum=%s] → HTTP %d %s",
+                             url, method, body["channelNum"], resp.status_code, resp.reason)
             except Exception as exc:
                 logger.debug("V2 stream %s [%s] → %s", url, method, exc)
-        # Log final failure after all attempts exhausted
-        logger.warning("V2 stream %s — all attempts returned 4xx/5xx", url)
+        logger.warning("V2 stream %s — all attempts failed (last HTTP %s)", url, last_status)
         return None
 
     def _post_v1_stream(
@@ -272,17 +274,17 @@ class ListenWifiClient:
             try:
                 if method == "GET" and body_style is None:
                     resp = self._session.get(
-                        location, timeout=STREAM_TIMEOUT, allow_redirects=False,
+                        location, timeout=REDIRECT_TIMEOUT, allow_redirects=False,
                     )
                 elif method == "POST":
                     resp = self._session.post(
                         location, json=body,
-                        timeout=STREAM_TIMEOUT, allow_redirects=False,
+                        timeout=REDIRECT_TIMEOUT, allow_redirects=False,
                     )
                 else:
                     resp = self._session.get(
                         location, params=body,
-                        timeout=STREAM_TIMEOUT, allow_redirects=False,
+                        timeout=REDIRECT_TIMEOUT, allow_redirects=False,
                     )
                 if resp.ok:
                     label = f"{method} as-is" if body_style is None else f"{method}+{body_style}"
@@ -293,7 +295,12 @@ class ListenWifiClient:
                     location, method, resp.status_code, resp.reason, resp.text,
                 )
             except Exception as exc:
-                logger.warning("Stream redirect %s [%s] → %s", location, method, exc)
+                logger.debug("Stream redirect %s [%s] → %s", location, method, exc)
+        logger.warning(
+            "Stream redirect %s unreachable — if V1 POST returned 200 the server "
+            "may still be sending RTP (check firewall / local IP routing)",
+            location,
+        )
         return None
 
 
