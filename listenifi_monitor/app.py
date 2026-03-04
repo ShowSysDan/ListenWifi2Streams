@@ -159,6 +159,9 @@ _rtp_receivers: dict[str, RTPStreamReceiver] = {}
 # uid → ListenWifiClient (the client for that channel's server)
 _api_clients: dict[str, ListenWifiClient] = {}
 
+# local_ip used when starting each channel's stream, needed for DELETE ?session=
+_channel_ips: dict[str, str] = {}
+
 
 # ---------------------------------------------------------------------------
 # Sorting helpers
@@ -408,20 +411,22 @@ def _start_channel(uid: str) -> dict:
 
     with _state_lock:
         _rtp_receivers[uid] = receiver
+        _channel_ips[uid]   = local_ip
 
     return {"ok": True, "udp_port": udp_port}
 
 
 def _stop_channel(uid: str) -> None:
     with _state_lock:
-        recv   = _rtp_receivers.pop(uid, None)
-        client = _api_clients.get(uid)
-        ch     = _channels.get(uid)
+        recv      = _rtp_receivers.pop(uid, None)
+        client    = _api_clients.get(uid)
+        ch        = _channels.get(uid)
+        local_ip  = _channel_ips.pop(uid, "")
     if recv:
         recv.stop()
     if client and ch:
         try:
-            client.stop_stream(ch["number"])
+            client.stop_stream(ch["number"], client_ip=local_ip)
         except Exception:
             pass
 

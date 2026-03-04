@@ -3,10 +3,21 @@ api_client.py — REST API wrapper for the ListenWifi (Exxothermic) server.
 
 Supports V2 API (/exxtractor/api/v2/) with automatic fallback to V1 (/api/myapp/).
 No authentication is attempted (public/open channels).
+
+Key findings from SDK binary analysis (PlaybackRetrofitAPI.class,
+AudioStreamMixInAnnotations.class, PlaybackMixInAnnotations.class):
+
+  • V2 stream path is  /exxtractor/api/v2/stream  (SINGULAR — not "streams")
+  • The POST body must be nested:
+        { "audioStream": { "channelNum": ..., "myAppIpAddress": ...,
+                           "myAppUdpPort": ..., "deviceInformation": {...} } }
+  • Stop stream:  DELETE /exxtractor/api/v2/stream?session=<client_ip>
+  • V1 legacy:    POST/DELETE /api/myapp/channels (unchanged)
 """
 
 import json
 import logging
+import platform
 import re
 import urllib.parse
 import uuid
@@ -18,14 +29,14 @@ logger = logging.getLogger(__name__)
 # Stable device ID for the lifetime of this process
 DEVICE_ID = str(uuid.uuid4())
 
-# API path constants (from iOS SDK EAEExxtractorAPIConstants.h + observed redirects)
+# API path constants — confirmed from Android SDK PlaybackRetrofitAPI.class binary
 V2_CHANNELS  = "/exxtractor/api/v2/networkChannels"
-V2_STREAM    = "/exxtractor/api/v2/streams"   # plural — confirmed by V1 redirect
+V2_STREAM    = "/exxtractor/api/v2/stream"   # SINGULAR — confirmed from binary decompile
 V1_CHANNELS  = "/api/myapp/asClientChannels"
 V1_STREAM    = "/api/myapp/channels"
 
 REQUEST_TIMEOUT   = 5   # seconds — channel listing
-STREAM_TIMEOUT    = 3   # seconds — stream start/stop (port 80, should be fast)
+STREAM_TIMEOUT    = 3   # seconds — stream start/stop requests
 REDIRECT_TIMEOUT  = 1   # seconds — redirect-follow attempts (port 8000); fail fast
 
 # Candidate paths tried by probe_server() for diagnostics
@@ -39,6 +50,24 @@ PROBE_PATHS = [
     "/channels",
     "/",
 ]
+
+
+def _device_information() -> dict:
+    """
+    Build the deviceInformation object required by the V2 stream request.
+
+    From AudioStreamMixInAnnotations.class (Android SDK):
+        getIpAddress()               → "myAppIpAddress"
+        getChannelNumber()           → "channelNum"
+        getUdpPort()                 → "myAppUdpPort"
+        getCurrentDeviceInformation()→ "deviceInformation"
+            DeviceInformation fields: manufacturer, buildFingerprint, deviceId
+    """
+    return {
+        "manufacturer":     platform.system() or "monitor",
+        "buildFingerprint": platform.node()   or "monitor",
+        "deviceId":         DEVICE_ID,
+    }
 
 
 def _safe_json(resp) -> dict:
@@ -100,18 +129,50 @@ class ListenWifiClient:
             result = self._post_v1_stream(channel_number, client_ip, client_udp_port)
         return result or {}
 
-    def stop_stream(self, channel_number: str) -> None:
-        """Tell the server to stop sending RTP audio for this channel."""
-        for url in (self.base_url + V2_STREAM, self.base_url + V1_STREAM):
+    def stop_stream(self, channel_number: str, client_ip: str = "") -> None:
+        """
+        Tell the server to stop sending RTP audio for this channel.
+
+        V2 DELETE uses ?session=<client_ip> (confirmed from stopChannelPlaybackv2
+        in PlaybackRetrofitAPI.class).  Falls back to ?channelNum= and V1.
+        """
+        v2_url = self.base_url + V2_STREAM
+        v1_url = self.base_url + V1_STREAM
+
+        # V2 preferred: session-based DELETE (client_ip is the session identifier)
+        if client_ip:
             try:
                 self._session.delete(
-                    url,
-                    params={"channelNum": channel_number},
+                    v2_url,
+                    params={"session": client_ip},
                     timeout=STREAM_TIMEOUT,
                     allow_redirects=False,
                 )
+                logger.debug("stop_stream V2 session=%s", client_ip)
             except Exception as exc:
-                logger.debug("stop_stream %s → %s", url, exc)
+                logger.debug("stop_stream V2 session %s → %s", v2_url, exc)
+
+        # V2 fallback: channelNum-based DELETE
+        try:
+            self._session.delete(
+                v2_url,
+                params={"channelNum": channel_number},
+                timeout=STREAM_TIMEOUT,
+                allow_redirects=False,
+            )
+        except Exception as exc:
+            logger.debug("stop_stream V2 channelNum %s → %s", v2_url, exc)
+
+        # V1 legacy
+        try:
+            self._session.delete(
+                v1_url,
+                params={"channelNum": channel_number},
+                timeout=STREAM_TIMEOUT,
+                allow_redirects=False,
+            )
+        except Exception as exc:
+            logger.debug("stop_stream V1 %s → %s", v1_url, exc)
 
     # ------------------------------------------------------------------
     # V2 helpers
@@ -183,32 +244,68 @@ class ListenWifiClient:
         client_ip: str,
         client_udp_port: int,
     ) -> dict | None:
+        """
+        POST /exxtractor/api/v2/stream with the nested audioStream body structure
+        confirmed from the Android SDK Jackson mixin annotations:
+
+            AudioStreamMixInAnnotations:
+                getIpAddress()                → "myAppIpAddress"
+                getChannelNumber()            → "channelNum"
+                getUdpPort()                  → "myAppUdpPort"
+                getCurrentDeviceInformation() → "deviceInformation"
+
+            PlaybackMixInAnnotations:
+                mAudioStream                  → "audioStream"   (wraps the above)
+        """
         url = self.base_url + V2_STREAM
-        # Try multiple body/method combinations — 400 usually means wrong field type or method
-        ch_int = int(channel_number) if channel_number.isdigit() else channel_number
+        ch_int = int(channel_number) if str(channel_number).isdigit() else channel_number
+
+        # Correct nested body structure (from SDK binary analysis)
+        audio_stream = {
+            "channelNum":      ch_int,
+            "myAppIpAddress":  client_ip,
+            "myAppUdpPort":    client_udp_port,
+            "deviceInformation": _device_information(),
+        }
+        nested_body = {"audioStream": audio_stream}
+
+        # Flat body fallback — older server versions may not require the wrapper
+        flat_body = {
+            "channelNum":     ch_int,
+            "myAppIpAddress": client_ip,
+            "myAppUdpPort":   client_udp_port,
+        }
+
         attempts = [
-            ("POST", {"channelNum": ch_int,        "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
-            ("POST", {"channelNum": channel_number, "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
-            ("GET",  {"channelNum": ch_int,        "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
-            ("GET",  {"channelNum": channel_number, "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port}),
+            ("POST", nested_body),                                    # correct SDK format
+            ("POST", flat_body),                                      # older server fallback
+            ("GET",  flat_body),                                      # some servers use GET
+            ("POST", {**flat_body, "channelNum": channel_number}),   # string channelNum
         ]
+
         last_status = None
         for method, body in attempts:
             try:
                 if method == "POST":
-                    resp = self._session.post(url, json=body, timeout=STREAM_TIMEOUT, allow_redirects=False)
+                    resp = self._session.post(
+                        url, json=body, timeout=STREAM_TIMEOUT, allow_redirects=False,
+                    )
                 else:
-                    resp = self._session.get(url, params=body, timeout=STREAM_TIMEOUT, allow_redirects=False)
+                    resp = self._session.get(
+                        url, params=body, timeout=STREAM_TIMEOUT, allow_redirects=False,
+                    )
                 last_status = resp.status_code
                 if resp.ok:
-                    logger.info("V2 stream OK (%s channelNum=%s)", method, body["channelNum"])
+                    desc = "nested" if body is nested_body else "flat"
+                    logger.info("V2 stream OK (%s %s channelNum=%s)",
+                                method, desc, body.get("channelNum", body.get("audioStream", {}).get("channelNum")))
                     return _safe_json(resp)
                 if resp.is_redirect:
                     location = resp.headers.get("Location", "")
                     logger.info("V2 stream redirect → %s", location)
-                    return self._follow_stream_redirect(location, body)
-                logger.debug("V2 stream %s [%s channelNum=%s] → HTTP %d %s",
-                             url, method, body["channelNum"], resp.status_code, resp.reason)
+                    return self._follow_stream_redirect(location, flat_body)
+                logger.debug("V2 stream %s [%s] → HTTP %d %s",
+                             url, method, resp.status_code, resp.reason)
             except Exception as exc:
                 logger.debug("V2 stream %s [%s] → %s", url, method, exc)
 
@@ -256,7 +353,7 @@ class ListenWifiClient:
             resp = self._session.post(
                 url, json=body,
                 timeout=STREAM_TIMEOUT,
-                allow_redirects=False,  # server redirects to port 8000 which may be unreachable
+                allow_redirects=False,  # server may redirect to port 8000
             )
             if resp.ok:
                 result = _safe_json(resp)
@@ -286,15 +383,14 @@ class ListenWifiClient:
         """
         Attempt to follow a stream redirect to an alternate port/path.
 
-        Tries three strategies in order:
-          1. GET the URL as-is (it may already carry query params from the origin server)
-          2. POST with our body as JSON
-          3. GET with our body as query params
+        The V1 endpoint sometimes returns an HTML body pointing to port 8000.
+        Port 8000 may not be reachable from management networks; if all attempts
+        time out and V1 POST returned 200 the server may already be streaming.
         """
         if not location:
             return None
         attempts = [
-            ("GET",  None),    # URL may already contain stream params
+            ("GET",  None),    # URL may already carry dummyBody query params
             ("POST", "json"),
             ("GET",  "params"),
         ]
@@ -348,7 +444,7 @@ class ListenWifiClient:
 
         logger.warning(
             "Stream redirect %s unreachable — if V1 POST returned 200 the server "
-            "may still be sending RTP (check firewall / local IP routing)",
+            "may still be sending RTP (check firewall / routing from 172.16.0.x to client)",
             location,
         )
         return None
