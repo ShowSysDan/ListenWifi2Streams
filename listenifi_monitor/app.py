@@ -406,7 +406,25 @@ def _start_channel(uid: str) -> dict:
         except (ValueError, TypeError):
             pass
 
-    receiver = RTPStreamReceiver(udp_port=udp_port, on_pcm=srv.feed_pcm)
+    # Extract solicitation token from response (field confirmed from Android SDK
+    # Constants.class: TOKEN_SOLICITATION="TokenSolicitation").
+    # Empty string is fine for public channels — the server just needs any packet.
+    solicit_token = (
+        response.get("tokenSolicitation")
+        or response.get("TokenSolicitation")
+        or response.get("token")
+        or ""
+    )
+
+    # Pass server_host + token to the receiver so it sends the solicitation
+    # FROM the bound socket before entering the receive loop (same-socket design
+    # avoids any race where RTP arrives before the receiver is ready).
+    receiver = RTPStreamReceiver(
+        udp_port=udp_port,
+        on_pcm=srv.feed_pcm,
+        server_host=server_host,
+        solicit_token=solicit_token,
+    )
     receiver.start()
 
     with _state_lock:

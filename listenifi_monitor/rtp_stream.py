@@ -33,6 +33,17 @@ OPUS_CHANNELS = 1  # mono; most ListenWifi channels are mono
 # Maximum UDP datagram we'll read (Opus frames are typically < 1500 bytes)
 MAX_UDP_BYTES = 4096
 
+# Solicitation protocol constants (from Android SDK Constants.class binary analysis):
+#   Constants.UDP_PORT = 16384
+#   Constants.TOKEN_SOLICITATION = "TokenSolicitation"
+#
+# After the HTTP stream request succeeds, the server waits for a UDP solicitation
+# packet sent FROM the client's RTP receive port TO server_ip:SOLICITATION_PORT.
+# This replaced the old ICMP ping mechanism (SDK v7.1 / v5.1 changelog).
+# The packet payload is the TokenSolicitation string from the HTTP response,
+# encoded as UTF-8 bytes (empty bytes for public channels with no token).
+SOLICITATION_PORT = 16384
+
 # ---------------------------------------------------------------------------
 # Pre-load opus shared library from the script directory before opuslib tries
 # to find it.  On Windows, ctypes only searches PATH — not the script folder —
@@ -118,11 +129,25 @@ class RTPStreamReceiver:
     fires on_pcm(pcm_bytes: bytes) for each decoded frame.
 
     Each frame is 960 samples × 2 bytes = 1920 bytes of 16-bit signed little-endian PCM.
+
+    Solicitation protocol (SDK v7.1 / v5.1, replacing ICMP ping):
+      After binding the receive socket, a UDP solicitation packet is sent FROM
+      that socket TO server_host:SOLICITATION_PORT (16384).  The server uses
+      this to confirm the client is ready and starts sending RTP.  Using the
+      same socket for both solicitation and receive avoids any race window.
     """
 
-    def __init__(self, udp_port: int, on_pcm: Callable[[bytes], None]):
+    def __init__(
+        self,
+        udp_port: int,
+        on_pcm: Callable[[bytes], None],
+        server_host: str = "",
+        solicit_token: str = "",
+    ):
         self._port = udp_port
         self._on_pcm = on_pcm
+        self._server_host = server_host
+        self._solicit_token = solicit_token
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
         self._sock: socket.socket | None = None
@@ -179,6 +204,24 @@ class RTPStreamReceiver:
             logger.error("Cannot bind UDP socket on port %d: %s", self._port, exc)
             return
 
+        # Send solicitation from the bound socket so the server can confirm the
+        # client is listening and start sending RTP.  This replaces the old
+        # ICMP-ping session validation (SDK changelog v7.1/v5.1).
+        if self._server_host:
+            payload = self._solicit_token.encode("utf-8") if self._solicit_token else b""
+            try:
+                self._sock.sendto(payload, (self._server_host, SOLICITATION_PORT))
+                logger.info(
+                    "Sent UDP solicitation → %s:%d (from port %d, token=%r)",
+                    self._server_host, SOLICITATION_PORT, self._port,
+                    self._solicit_token or "<empty>",
+                )
+            except OSError as exc:
+                logger.warning(
+                    "Solicitation to %s:%d failed: %s",
+                    self._server_host, SOLICITATION_PORT, exc,
+                )
+
         logger.debug("RTP receive loop running on port %d", self._port)
 
         while not self._stop_event.is_set():
@@ -208,6 +251,8 @@ class RTPStreamReceiver:
                 logger.debug("Opus decode error (port %d): %s", self._port, exc)
             except Exception as exc:
                 logger.warning("Unexpected decode error: %s", exc)
+
+
 
 
 def bind_free_udp_port() -> tuple[int, socket.socket]:
