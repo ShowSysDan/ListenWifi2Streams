@@ -15,9 +15,11 @@ AudioStreamMixInAnnotations.class, PlaybackMixInAnnotations.class):
   • V1 legacy:    POST/DELETE /api/myapp/channels (unchanged)
 """
 
+import json
 import logging
 import platform
 import re
+import urllib.parse
 import uuid
 
 import requests
@@ -307,6 +309,31 @@ class ListenWifiClient:
             except Exception as exc:
                 logger.debug("V2 stream %s [%s] → %s", url, method, exc)
 
+        # Strategy: dummyMethod=POST&dummyBody=<json> — the format the server itself
+        # uses in its redirect URLs (Mongoose embedded-server style).  The standard
+        # POST/GET forms above may be rejected at port 80 while this form succeeds.
+        dummy_body_json = json.dumps({
+            "channelNum":     ch_int,
+            "myAppIpAddress": client_ip,
+            "myAppUdpPort":   client_udp_port,
+        })
+        dummy_url = url + "?dummyMethod=POST&dummyBody=" + dummy_body_json
+        try:
+            resp = self._session.get(dummy_url, timeout=STREAM_TIMEOUT, allow_redirects=False)
+            last_status = resp.status_code
+            if resp.ok:
+                logger.info("V2 stream dummyMethod OK")
+                return _safe_json(resp)
+            if resp.is_redirect:
+                location = resp.headers.get("Location", "")
+                logger.info("V2 stream dummyMethod redirect → %s", location)
+                return self._follow_stream_redirect(location, {"channelNum": ch_int,
+                    "myAppIpAddress": client_ip, "myAppUdpPort": client_udp_port})
+            logger.debug("V2 stream %s [GET dummyMethod] → HTTP %d %s",
+                         url, resp.status_code, resp.reason)
+        except Exception as exc:
+            logger.debug("V2 stream %s [GET dummyMethod] → %s", url, exc)
+
         logger.warning("V2 stream %s — all attempts failed (last HTTP %s)", url, last_status)
         return None
 
@@ -393,6 +420,27 @@ class ListenWifiClient:
                 )
             except Exception as exc:
                 logger.debug("Stream redirect %s [%s] → %s", location, method, exc)
+        # Port-80 fallback: if the redirect is on port 8000 (unreachable from
+        # management networks), re-try the identical path + query string on port 80.
+        # The port-80 web server may proxy or handle the same endpoint internally.
+        parsed = urllib.parse.urlparse(location)
+        if parsed.port and parsed.port != 80:
+            port80_loc = location.replace(f":{parsed.port}/", ":80/", 1)
+            logger.info("Stream redirect port %d unreachable — retrying on port 80: %s",
+                        parsed.port, port80_loc)
+            try:
+                resp = self._session.get(
+                    port80_loc, timeout=STREAM_TIMEOUT, allow_redirects=False,
+                )
+                if resp.ok:
+                    logger.info("Stream redirect port-80 fallback succeeded")
+                    return _safe_json(resp) or {}
+                logger.warning(
+                    "Stream redirect port-80 fallback %s → HTTP %d %s | %.200s",
+                    port80_loc, resp.status_code, resp.reason, resp.text,
+                )
+            except Exception as exc:
+                logger.warning("Stream redirect port-80 fallback %s → %s", port80_loc, exc)
 
         logger.warning(
             "Stream redirect %s unreachable — if V1 POST returned 200 the server "
